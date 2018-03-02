@@ -1,8 +1,115 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
-  </ion-navbar>
+    <ion-toolbar color="primary">
+      <ion-title>OkeDeli</ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="openOrder()">
+          <ion-icon name="list"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-buttons end>
+          <button ion-button icon-only (click)="openCart()">
+            <ion-icon name="cart"></ion-icon>
+          </button>
+      </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+
+    <ion-fab right middle>
+        <button ion-fab color="dark" [navPush]="pushPage">
+          <ion-icon name="add"></ion-icon>
+        </button>
+    </ion-fab> 
+
+    <ion-scroll scrollX="true" style="width:100%;height:110px">
+        <div class="inner">
+            <ion-grid>
+                <ion-row no-padding>
+                  <ion-col col-2 (click)="getProductCategory(3, 'Kue')">
+                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/cupcake.png">
+                      </div>
+                  </ion-col>
+                  <ion-col col-2 (click)="getProductCategory(4, 'Cemilan')">
+                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/cemilan.png">
+                      </div>
+                  </ion-col>
+                  <ion-col col-2 (click)="getProductCategory(1, 'Ayam')">
+                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/chicken.png">
+                      </div>
+                  </ion-col>
+                  <ion-col col-2 (click)="getProductCategory(2, 'Cepat Saji')">
+                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/fastfood.png">
+                      </div>
+                  </ion-col>
+                  <ion-col col-2 (click)="getProductCategory(5, 'Minuman')">
+                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/drink.png">
+                      </div>
+                  </ion-col>
+                  <ion-col col-2 (click)="getProductCategory(6, 'Buah')">
+                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/fruit.png">
+                      </div>
+                  </ion-col>
+                </ion-row>
+            </ion-grid>
+        </div>
+    </ion-scroll>
+
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content
+          pullingIcon="arrow-dropdown"
+          pullingText="Tarik untuk pembaruan"
+          refreshingSpinner="circles"
+          refreshingText="Pembaruan...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <div padding>
+        <ion-segment [(ngModel)]="produk">
+          <ion-segment-button value="populer">
+            <strong>Populer</strong>
+          </ion-segment-button>
+          <ion-segment-button value="penyedia">
+            <strong>Penyedia</strong>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+                
+      <div [ngSwitch]="produk">
+        <ion-list *ngSwitchCase="'populer'">
+          <ion-grid no-padding fixed>
+            <ion-row>
+              <ion-col col-6 *ngFor="let item of dataSet" (click)="getProductDetail(item.id)">
+                <ion-item no-lines>
+                  <img src="https://okedeli.com/apps/images/{{item.foto}}"> 
+                  <p color="primary"><strong>{{item.nama}}</strong></p>
+                  <p color="primary">Rp.{{item.harga_satuan}}</p>
+                </ion-item>
+                <ion-item>
+                  <p>
+                    <ion-icon name="text"></ion-icon>
+                    {{item.jml}}
+                  </p>
+                  <p item-end>                        
+                    <ion-icon name="heart"></ion-icon>
+                    {{item.suka}}
+                  </p>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-list>
+                
+        <ion-list *ngSwitchCase="'penyedia'">
+          <button ion-item *ngFor="let item of dataSetPenyedia" (click)="getProductPenyedia(item.id_penyedia, item.nama_penyedia)">
+            {{ item.nama_penyedia }}
+          </button>  
+        </ion-list>
+      </div>
 </ion-content>
