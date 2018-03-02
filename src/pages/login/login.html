@@ -1,0 +1,38 @@
+<ion-header>
+    <ion-navbar color="primary">
+      <ion-title>Login Pengguna</ion-title>
+      <ion-buttons start>
+          <button ion-button icon-only (click)="goToSignup()">
+            <ion-icon name="person-add"></ion-icon>
+          </button>
+      </ion-buttons>
+
+    </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+    <ion-list>
+
+      <ion-item>
+        <ion-label floating>Nama Pengguna</ion-label>
+        <ion-input type="text" [(ngModel)]="userData.username"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Kata Sandi</ion-label>
+        <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+          <button ion-button icon-start text-center block (click)="logIn()">
+            Login
+          </button>
+      </ion-item>
+
+      <a ion-item text-right href="#">Lupa Kata Sandi</a>
+
+    </ion-list>
+
+</ion-content>
