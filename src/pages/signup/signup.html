@@ -1,0 +1,41 @@
+<ion-header>
+    <ion-navbar color="primary">
+      <ion-title>Pendaftaran</ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list>
+      <ion-item-divider><strong>DATA PROFIL</strong></ion-item-divider>
+      <ion-item>
+        <ion-icon name="heart"></ion-icon>
+        <ion-label floating>Nama Lengkap</ion-label>
+        <ion-input type="text" [(ngModel)]="userData.name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>eMail</ion-label>
+        <ion-input type="email" [(ngModel)]="userData.email"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <ion-item-divider><strong>DATA LOGIN</strong></ion-item-divider>
+      <ion-item>
+        <ion-label floating>Nama Pengguna</ion-label>
+        <ion-input type="text" [(ngModel)]="userData.username"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Kata Sandi</ion-label>
+        <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <button ion-button icon-start large full color="primary" (click)="signup()">
+          <ion-icon name="add"></ion-icon>
+          DAFTAR SEKARANG
+        </button>
+      </ion-item>
+  
+      <a ion-item text-right (click)="login()">Login Pengguna</a>
+  
+    </ion-list>
+  </ion-content>

@@ -2,7 +2,7 @@
     <ion-navbar color="primary">
       <ion-title>Login Pengguna</ion-title>
       <ion-buttons start>
-          <button ion-button icon-only (click)="goToSignup()">
+          <button ion-button icon-only [navPush]="PushSignup">
             <ion-icon name="person-add"></ion-icon>
           </button>
       </ion-buttons>
@@ -26,7 +26,7 @@
       </ion-item>
 
       <ion-item>
-          <button ion-button icon-start text-center block (click)="logIn()">
+          <button ion-button icon-start text-center block large (click)="logIn()">
             Login
           </button>
       </ion-item>

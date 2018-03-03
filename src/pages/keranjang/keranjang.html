@@ -1,0 +1,59 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button ion-button icon-only [navPush]="pushPage">
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>
+            Keranjang
+        </ion-title>
+    </ion-toolbar>
+</ion-header> 
+
+<ion-content>
+
+    <ion-list>
+        <ion-item-divider>
+            <p item-start>Total Keranjang</p>
+            <p item-end><strong>Rp.{{totalPembayaran}}</strong></p>
+        </ion-item-divider>
+      <ion-grid no-padding fixed>
+          <ion-row>
+                <ion-col col-6 *ngFor="let item of dataSet; let msgIndex = index">
+                    <ion-item>
+                        <img src="https://okedeli.com/apps/images/{{item.foto}}">
+                        <p color="primary"><strong>{{item.nama}}</strong></p>
+                        <p><small><strong>{{item.qty}} pkt <ion-icon name="arrow-forward"></ion-icon>  Rp.{{item.harga_item}}</strong></small></p>
+                        <ion-item no-lines no-padding>
+                            <p item-start><small>{{item.dt_belanja | amTimeAgo}}</small></p>
+                            <button ion-button clear color="secondarydark" item-end (click)="deleteOrder(item.id_belanja, msgIndex)">
+                                <ion-icon name="close" color="secondarydark"></ion-icon>
+                            </button>
+                        </ion-item>
+                    </ion-item>
+                    
+                </ion-col>
+          </ion-row>
+      </ion-grid>
+    </ion-list>
+
+</ion-content>
+
+<ion-footer>
+    <ion-grid no-padding fixed>
+        <ion-row>
+            <ion-col col-7>
+                <ion-item no-lines>
+                    Saldo <strong>Rp.{{vSaldo}}</strong>
+                </ion-item>
+            </ion-col>
+            <ion-col col-5>
+                <button ion-button icon-start full color="primarydark" (click)="showConfirm()">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                    Bayar
+                </button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

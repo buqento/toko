@@ -1,0 +1,90 @@
+<ion-content>
+
+    <ion-fab top>
+        <button ion-fab mini color="dark" navPop>
+          <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-fab>
+
+    <img src="https://okedeli.com/apps/images/{{foto}}">
+    <ion-list>
+        <ion-item>
+            <p><strong>{{nama}}</strong></p>
+            <p>Rp.{{harga_satuan}}</p>
+            <p item-end>{{like}}</p>
+            <ion-icon item-end color="primary" name="heart" (click)="sukaProduct()"></ion-icon>
+        </ion-item>
+        <ion-item text-wrap>
+            <p><strong>{{vPenjual}}</strong></p>
+            <p>{{vAlamatPenjual}}</p>
+        </ion-item>
+
+        <ion-item-divider>
+            <strong>DETAIL BELANJA</strong>
+        </ion-item-divider>
+
+        <ion-item>
+            <ion-label stacked>Jumlah Produk</ion-label>
+            <ion-select 
+            [(ngModel)]="userPostData.qty" 
+            (ionChange)="hitung()">
+                <ion-option value="1" selected="true">1 Item</ion-option>
+                <ion-option value="2">2 Item</ion-option>
+                <ion-option value="3">3 Item</ion-option>
+                <ion-option value="4">4 Item</ion-option>
+                <ion-option value="5">5 Item</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Total Harga Produk</ion-label>
+            <ion-input type="text" readonly="true" value="{{hargaItem}}"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label stacked>Catatan Untuk Penjual</ion-label>
+            <ion-textarea rows="1" [(ngModel)]="userPostData.keterangan"></ion-textarea>
+        </ion-item>
+
+
+        <ion-item-divider>
+            <strong>ALAMAT PENGIRIMAN</strong>
+        </ion-item-divider>
+        
+        <ion-item text-wrap>
+            <p>{{vAlamat}}</p>
+            <button ion-button clear item-end (click)="setMap()">
+                <ion-icon name="create"></ion-icon>
+            </button>
+        </ion-item>
+
+        <ion-item no-lines>
+            <p item-start>Biaya Pengiriman</p>
+            <p ion-text item-end><strong>Rp.{{vOngkir}}</strong></p>
+        </ion-item>
+
+        <ion-item color="secondary">
+            <p ion-text item-start>Total Bayar</p>
+            <p ion-text item-end><strong>Rp.{{tHarga}}</strong></p>
+        </ion-item>
+
+    </ion-list>
+</ion-content>
+
+<ion-footer>
+        <ion-grid no-padding fixed>
+            <ion-row>
+                <ion-col col-7>
+                    <ion-item no-lines>
+                        Saldo <strong>Rp.{{updateSaldo}}</strong>
+                    </ion-item>
+                </ion-col>
+                <ion-col col-5>
+                    <button ion-button icon-start full color="primarydark" (click)="addToBasket()">
+                        <ion-icon name="cart"></ion-icon>
+                        Tambah
+                    </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+</ion-footer>

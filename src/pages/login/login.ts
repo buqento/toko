@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { HomePage } from '../home/home';
+import { SignupPage } from '../signup/signup';
 
 @IonicPage()
 @Component({
@@ -9,6 +10,7 @@ import { HomePage } from '../home/home';
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  PushSignup: any;
   responseData : any;
   userDetails: any;
   uLat: any;
@@ -19,6 +21,7 @@ export class LoginPage {
     public authService: AuthService,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController) {
+      this.PushSignup = SignupPage;
   }
 
   ionViewDidLoad(){

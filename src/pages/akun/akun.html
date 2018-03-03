@@ -1,0 +1,59 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button ion-button icon-only navPop>
+                <ion-icon name="close"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-title>
+            Akun
+        </ion-title>
+    </ion-toolbar>
+</ion-header> 
+  
+  <ion-content>
+  
+    <ion-list>
+        <ion-item>
+            {{userDetails.full_name}}
+        </ion-item>
+        <ion-item text-wrap>
+            <p>{{vAlamat}}</p>
+            <button ion-button clear item-end (click)="openMap()">
+                <ion-icon name="create"></ion-icon>
+            </button>
+        </ion-item>
+        <ion-item>
+            <p>Rp.{{userSaldos.saldo}}</p>
+            <button ion-button clear item-end (click)="openDeposit()">
+                <ion-icon name="add"></ion-icon>
+            </button>
+        </ion-item>
+    </ion-list>
+  
+    <ion-list>
+      <ion-item-divider>
+          <strong>PENGATURAN</strong>
+      </ion-item-divider>
+      <ion-item>
+          <ion-icon name="person" item-start></ion-icon>
+          Ubah Data Profil
+      </ion-item>
+      <ion-item>
+          <ion-icon name="key" item-start></ion-icon>
+          Ubah Kata Sandi
+      </ion-item>
+    </ion-list>
+  
+    <ion-list>
+          <ion-item (click)="openSlide()">
+              <ion-icon name="bulb" item-start></ion-icon>
+              Tips Berbelanja
+          </ion-item>
+          <button ion-item (click)="logOut()">
+            <ion-icon name="log-out" item-start></ion-icon>
+            Keluar
+          </button>
+    </ion-list>
+    
+  </ion-content>  

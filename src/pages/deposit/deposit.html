@@ -1,0 +1,31 @@
+<ion-header>
+        <ion-toolbar>
+            <ion-buttons start>
+                <button ion-button icon-only [navPush]="pushHome">
+                    <ion-icon name="close"></ion-icon>
+                </button>
+            </ion-buttons>
+            <ion-title>
+                Deposit
+            </ion-title>
+        </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list padding>
+        <ion-item-divider>
+            <h1 item-start>Saldo</h1>
+            <h1 item-end><strong>Rp.{{vSaldo}}</strong></h1>
+        </ion-item-divider>
+        <ion-item>
+        <ion-label floating>Kode Voucher</ion-label>
+        <ion-input type="text" [(ngModel)]="kodeVoucher"></ion-input>
+        </ion-item>
+    
+        <button ion-button icon-start large full color="primary" (click)="validasi()">
+            <ion-icon name="add"></ion-icon>
+            Deposit
+        </button>
+
+    </ion-list>
+</ion-content>

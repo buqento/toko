@@ -2,58 +2,67 @@
     <ion-toolbar color="primary">
       <ion-title>OkeDeli</ion-title>
       <ion-buttons end>
-        <button ion-button icon-only (click)="openOrder()">
-          <ion-icon name="list"></ion-icon>
+        <button ion-button icon-only [navPush]="PushBantuan">
+          <ion-icon name="bulb"></ion-icon>
         </button>
-      </ion-buttons>
-      <ion-buttons end>
-          <button ion-button icon-only (click)="openCart()">
-            <ion-icon name="cart"></ion-icon>
-          </button>
       </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
-    <ion-fab right middle>
-        <button ion-fab color="dark" [navPush]="pushPage">
-          <ion-icon name="add"></ion-icon>
+    <ion-fab bottom right >
+        <button ion-fab color="primary">
+          <ion-icon name="menu"></ion-icon>
         </button>
-    </ion-fab> 
+        <ion-fab-list side="top">
+          <button ion-fab color="primary" (click)="openOrder()">
+              <ion-icon name="checkmark-circle"></ion-icon>
+          </button>
+          <button ion-fab color="primary" (click)="openKeranjang()">
+              <ion-icon name="cart"></ion-icon>
+          </button>
+        </ion-fab-list>
+        <ion-fab-list side="left">
+            <button ion-fab color="primary" [navPush]="PushAkun">
+                <ion-icon name="person"></ion-icon>
+            </button>
+        </ion-fab-list>
+    </ion-fab>
 
-    <ion-scroll scrollX="true" style="width:100%;height:110px">
+
+    <ion-scroll scrollX="true" style="width:100%;height:80px">
         <div class="inner">
             <ion-grid>
                 <ion-row no-padding>
                   <ion-col col-2 (click)="getProductCategory(3, 'Kue')">
-                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/cupcake.png">
+                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/category/Food-Cheese-icon.png">
                       </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(4, 'Cemilan')">
-                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/cemilan.png">
+                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/category/Food-French-Fries-icon.png">
                       </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(1, 'Ayam')">
-                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/chicken.png">
+                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/category/Food-Spaghetti-icon.png">
                       </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(2, 'Cepat Saji')">
-                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/fastfood.png">
+                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/category/Food-Coffee-To-Go-icon.png">
                       </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(5, 'Minuman')">
-                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/drink.png">
+                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/category/Food-Noodles-icon.png">
                       </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(6, 'Buah')">
-                      <div style="background-color:#888;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/fruit.png">
+                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
+                          <img src="https://okedeli.com/apps/images/category/Food-Bread-icon.png">
                       </div>
                   </ion-col>
                 </ion-row>
@@ -76,7 +85,7 @@
             <strong>Populer</strong>
           </ion-segment-button>
           <ion-segment-button value="penyedia">
-            <strong>Penyedia</strong>
+            <strong>Penjual</strong>
           </ion-segment-button>
         </ion-segment>
       </div>
