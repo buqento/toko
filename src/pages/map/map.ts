@@ -1,8 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, Platform, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, Platform, AlertController, LoadingController, Icon } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { AuthService } from '../../providers/auth-service/auth-service';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions,
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions, GoogleMapsAnimation,
   // CameraPosition,
   // MarkerOptions,
   // Marker
@@ -17,6 +17,7 @@ declare var google:any;
   templateUrl: 'map.html',
 })
 export class MapPage {
+  peta: GoogleMap;
   map: GoogleMap;
   userDetails: any;
   Start: any;
@@ -96,7 +97,7 @@ export class MapPage {
           lng: pLng
         },
         zoom: 15,
-        // tilt: 30
+        tilt: 30
       }
     };
 
@@ -109,7 +110,7 @@ export class MapPage {
           position: {
             lat: pLat,
             lng: pLng
-          }
+          },
         })
 
         this.map.setMapTypeId("MAP_TYPE_ROADMAP")
@@ -123,7 +124,8 @@ export class MapPage {
             position: {
               lat: data[0].lat,
               lng: data[0].lng
-            }
+            },
+            icon: 'https://okedeli.com/apps/images/pin.png',
           })
           this.geocodeLatLng(parseFloat(this.vLat), parseFloat(this.vLng)).then(respon => {
             this.showConfirm('Alamat pengiriman', respon, this.vLat, this.vLng)

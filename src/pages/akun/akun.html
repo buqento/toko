@@ -19,15 +19,11 @@
         </ion-item>
         <ion-item text-wrap>
             <p>{{vAlamat}}</p>
-            <button ion-button clear item-end (click)="openMap()">
-                <ion-icon name="create"></ion-icon>
-            </button>
+            <ion-icon color="primarydark" small name="create" item-end (click)="openMap()"></ion-icon>
         </ion-item>
         <ion-item>
-            <p>Rp.{{userSaldos.saldo}}</p>
-            <button ion-button clear item-end (click)="openDeposit()">
-                <ion-icon name="add"></ion-icon>
-            </button>
+            <p>Saldo <strong>Rp.{{userSaldos.saldo}}</strong></p>
+            <ion-icon color="primarydark" small name="add" item-end (click)="openDeposit()"></ion-icon>           
         </ion-item>
     </ion-list>
   

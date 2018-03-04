@@ -67,13 +67,14 @@ export class KeranjangPage {
         {
           text: 'Tidak',
           handler: () => {
-            console.log('Disagree clicked');
+            this.navCtrl.push(KeranjangPage);
+            // console.log('Disagree clicked');
           }
         },
         {
           text: 'Tambah Deposit',
           handler: () => {
-            this.navCtrl.push(DepositPage);
+            // this.navCtrl.push(DepositPage);
           }
         }
       ]
@@ -81,7 +82,7 @@ export class KeranjangPage {
     confirm.present();
   }
 
-  showConfirm() {
+  showConfirmPembayaran() {
     let confirm = this.alertCtrl.create({
       title: 'Lakukan pembayaran?',
       message: 'Anda setuju untuk melakukan pembayaran semua produk yang ada pada keranjang?',
@@ -117,53 +118,51 @@ export class KeranjangPage {
   }
 
   payOrder(){ 
+    //get user saldo
     const dataSaldo = JSON.parse(localStorage.getItem('userSaldo'));
     this.userSaldo = dataSaldo.userSaldo;
     this.updateSaldo = this.userSaldo.saldo;
-
+    //get total pembayaran
     this.productPostData.kodeBelanja = this.kodeBelanja.kode;
     this.authService.postData(this.productPostData,'userBasket').then((result) => {
     this.responseData = result;
     this.dataSet = this.responseData.userDataBasket;
     this.totalPembayaran = this.dataSet[0].items_total;
-
     });
-
       if(parseInt(this.updateSaldo) < parseInt(this.totalPembayaran)){
+        this.navCtrl.push(DepositPage);
         this.showConfirmSaldo();
       }else{
         //update status belanja
         this.productPostData.kodeBelanja = this.kodeBelanja.kode;
         this.authService.postData(this.productPostData,'ubahStatusBelanja');
         this.showAlert();
-        //generate kode belanja
-        localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
-        this.navCtrl.push(OrderPage);
-        //update saldo
+        //update user saldo
         this.saldoSekarang = parseInt(this.updateSaldo) - parseInt(this.itemtotal);
         localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+this.saldoSekarang+'"}}');
         this.productPostData.saldo = this.saldoSekarang;
         this.authService.postData(this.productPostData,'updateSaldo');
+        //generate kode belanja
+        localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
+        this.navCtrl.push(OrderPage);
       }
   }
 
   getProduct(){
-    this.productPostData.kodeBelanja = this.kodeBelanja.kode;
-    this.authService.postData(this.productPostData,'userBasket').then((result) => {
-    this.responseData = result;
-    this.dataSet = this.responseData.userDataBasket;
-    this.totalPembayaran = this.convertCurr(this.dataSet[0].items_total);
-  
-    });
+      this.productPostData.kodeBelanja = this.kodeBelanja.kode;
+      this.authService.postData(this.productPostData,'userBasket').then((result) => {
+      this.responseData = result;
+      if(this.responseData.userDataBasket){
+        this.dataSet = this.responseData.userDataBasket;
+        this.totalPembayaran = this.convertCurr(this.dataSet[0].items_total);
+      }else{
+        this.navCtrl.push(HomePage);
+      }
+      })
   }
 
   deleteOrder(id_belanja, msgIndex){
-    let loading = this.loadingCtrl.create({
-      spinner: 'crescent',
-      showBackdrop: true
-    })
     if(id_belanja > 0){
-      loading.present();
       this.productPostData.id_belanja = id_belanja;
       this.authService.postData(this.productPostData,'orderDelete').then((result) => {
       this.responseData = result;
@@ -171,8 +170,7 @@ export class KeranjangPage {
         this.dataSet.splice(msgIndex, 1);
         this.getProduct();
       }
-      loading.dismiss();
-    });
+    })
   }}
 
   convertCurr(angka){

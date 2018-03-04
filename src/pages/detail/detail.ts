@@ -14,37 +14,39 @@ declare var google:any;
   templateUrl: 'detail.html',
 })
 export class DetailPage {
-  public userDetails: any;
-  public userLocation: any;
-  public kodeBelanja: any;
-  public nama: any;
-  public harga_satuan: any;
-  public foto: any;
-  public kode_item: any;
-  public selectOptions: any;
-  public responseData : any;
-  public dataSet : any;
-  public tHarga: any;
-  public tBayar: any;
-  public lokasiPenjual: any;
-  public lat: any;
-  public lng: any;
-  public vPenjual: any;
-  public dlat: any;
-  public dlng: any;
-  public vAlamatPenjual: any;
-  public updateSaldo: any;
-  public userSaldos: any;
-  public vAlamat: any;
-  public vJarak: any;
-  public lokasiLatLng: any;
-  public vOngkir: any;
-  public ongKir:any;
-  public uLat: any;
-  public uLng: any;
-  public hargaItem: any;
-  public id: any;
-  public like: any;
+  userDetails: any;
+  userLocation: any;
+  kodeBelanja: any;
+  nama: any;
+  harga_satuan: any;
+  vHargaSatuan: any;
+  foto: any;
+  kode_item: any;
+  selectOptions: any;
+  responseData : any;
+  dataSet : any;
+  tHarga: any;
+  tBayar: any;
+  lokasiPenjual: any;
+  lat: any;
+  lng: any;
+  vPenjual: any;
+  dlat: any;
+  dlng: any;
+  vAlamatPenjual: any;
+  updateSaldo: any;
+  userSaldos: any;
+  vAlamat: any;
+  vJarak: any;
+  lokasiLatLng: any;
+  vOngkir: any;
+  vTHarga: any;
+  ongKir:any;
+  uLat: any;
+  uLng: any;
+  hargaItem: any;
+  id: any;
+  like: any;
   userPostData = {
     //suka produk
     "id":"",
@@ -80,6 +82,7 @@ export class DetailPage {
       this.dlng = pData[0].lng;
       this.like = pData[0].suka;
       this.harga_satuan = pData[0].harga_satuan;
+      this.vHargaSatuan = this.convertCurr(pData[0].harga_satuan);
       this.vPenjual = pData[0].nama_penyedia;
       this.userPostData.id_user = this.userDetails.id;
       this.userPostData.kode_item = pData[0].kode_item;
@@ -88,7 +91,6 @@ export class DetailPage {
       this.userPostData.lat = this.userDetails.lat;
       this.userPostData.lng = this.userDetails.lng;
       this.userPostData.kode_belanja = this.kodeBelanja.kode;
-      
   }
 
   ionViewDidLoad(){
@@ -108,8 +110,9 @@ export class DetailPage {
     this.distance(parseFloat(this.uLat), parseFloat(this.uLng), this.dlat, this.dlng, "K").then(data => {
       this.vJarak = data;
       this.ongKir = 1500 * parseInt(this.vJarak);
-      this.vOngkir = parseInt(this.ongKir);
-      this.tHarga = this.vOngkir;
+      this.vOngkir = this.convertCurr(parseInt(this.ongKir));
+      this.tHarga = parseInt(this.ongKir);
+      this.vTHarga = this.convertCurr(this.tHarga);
     });
   }
 
@@ -123,9 +126,10 @@ export class DetailPage {
     let jumlah: any = this.userPostData.qty;
     let hrgSatuan = this.harga_satuan;
     let tbayar: any = jumlah * hrgSatuan;
-    this.tHarga = parseInt(tbayar + this.vOngkir);
+    this.tHarga = parseInt(tbayar + this.ongKir);
     this.hargaItem = this.convertCurr(tbayar);
     this.userPostData.tBayar = this.tHarga;
+    this.vTHarga = this.convertCurr(this.tHarga);
   }
 
   presentToast(msg) {

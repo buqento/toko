@@ -15,7 +15,7 @@
 
     <ion-list>
         <ion-item-divider>
-            <p item-start>Total Keranjang</p>
+            <p item-start>Total Pembayaran</p>
             <p item-end><strong>Rp.{{totalPembayaran}}</strong></p>
         </ion-item-divider>
       <ion-grid no-padding fixed>
@@ -27,12 +27,11 @@
                         <p><small><strong>{{item.qty}} pkt <ion-icon name="arrow-forward"></ion-icon>  Rp.{{item.harga_item}}</strong></small></p>
                         <ion-item no-lines no-padding>
                             <p item-start><small>{{item.dt_belanja | amTimeAgo}}</small></p>
-                            <button ion-button clear color="secondarydark" item-end (click)="deleteOrder(item.id_belanja, msgIndex)">
-                                <ion-icon name="close" color="secondarydark"></ion-icon>
-                            </button>
+                            <p item-end (click)="deleteOrder(item.id_belanja, msgIndex)">                        
+                                <ion-icon name="close" item-end (click)="deleteOrder(item.id_belanja, msgIndex)"></ion-icon>
+                            </p>
                         </ion-item>
                     </ion-item>
-                    
                 </ion-col>
           </ion-row>
       </ion-grid>
@@ -49,7 +48,7 @@
                 </ion-item>
             </ion-col>
             <ion-col col-5>
-                <button ion-button icon-start full color="primarydark" (click)="showConfirm()">
+                <button ion-button icon-start full color="primarydark" (click)="showConfirmPembayaran()">
                     <ion-icon name="checkmark-circle"></ion-icon>
                     Bayar
                 </button>

@@ -1,7 +1,7 @@
 <ion-content>
 
     <ion-fab top>
-        <button ion-fab mini color="dark" navPop>
+        <button ion-fab mini color="primarydark" navPop>
           <ion-icon name="arrow-back"></ion-icon>
         </button>
     </ion-fab>
@@ -10,7 +10,7 @@
     <ion-list>
         <ion-item>
             <p><strong>{{nama}}</strong></p>
-            <p>Rp.{{harga_satuan}}</p>
+            <p>Rp.{{vHargaSatuan}}</p>
             <p item-end>{{like}}</p>
             <ion-icon item-end color="primary" name="heart" (click)="sukaProduct()"></ion-icon>
         </ion-item>
@@ -53,9 +53,7 @@
         
         <ion-item text-wrap>
             <p>{{vAlamat}}</p>
-            <button ion-button clear item-end (click)="setMap()">
-                <ion-icon name="create"></ion-icon>
-            </button>
+            <ion-icon color="primarydark" small name="create" item-end (click)="setMap()"></ion-icon>
         </ion-item>
 
         <ion-item no-lines>
@@ -64,8 +62,8 @@
         </ion-item>
 
         <ion-item color="secondary">
-            <p ion-text item-start>Total Bayar</p>
-            <p ion-text item-end><strong>Rp.{{tHarga}}</strong></p>
+            <p ion-text item-start>Estimasi Harga</p>
+            <p ion-text item-end><strong>Rp.{{vTHarga}}</strong></p>
         </ion-item>
 
     </ion-list>
