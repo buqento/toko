@@ -1,84 +1,51 @@
 import { Component } from '@angular/core';
-import { NavController, App, LoadingController } from 'ionic-angular';
-import { AuthService } from '../../providers/auth-service/auth-service';
+import { NavController, App } from 'ionic-angular';
 import { DepositPage } from '../deposit/deposit';
-import { Geolocation } from '@ionic-native/geolocation';
 import { BantuanPage } from '../bantuan/bantuan';
 import { HomePage } from '../home/home';
 import { LoginPage } from '../login/login';
 import { MapPage } from '../map/map';
-
-declare var google:any;
 
 @Component({
   selector: 'page-akun',
   templateUrl: 'akun.html'
 })
 export class AkunPage {
-  PushPage: any;
+  pushDeposit: any;
+  pushBantuan: any;
+  pushMap: any;
   userDetails: any;
-  updateSaldo: any;
   userLokasi: any;
-  vSaldo: any;
   userSaldos: any;
-  responseData: any;
-  lat: any;
-  lng: any;
   vAlamat: any;
   userLocation: any;
-  userPostData = {"id":""}
+  vUserSaldo: any;
 
-  constructor(private geolocation: Geolocation, 
-    public navCtrl: NavController, 
-    public app: App, 
-    public loadingCtrl: LoadingController,
-    public authService:AuthService) {
-      this.PushPage = HomePage;
+  constructor(public navCtrl: NavController, public app: App) {
+      this.pushDeposit = DepositPage;
+      this.pushBantuan = BantuanPage;
+      this.pushMap = MapPage;
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data.userData;
       const dataSaldo = JSON.parse(localStorage.getItem('userSaldo'));
       this.userSaldos = dataSaldo.userSaldo;
+      this.vUserSaldo = this.convertCurr(this.userSaldos.saldo);
       const dataLokasi = JSON.parse(localStorage.getItem('userLocation'));
       this.userLokasi = dataLokasi.userLocation;
-      let loading = this.loadingCtrl.create({
-        spinner: 'crescent',
-        showBackdrop: true
-      })
-      loading.present();
-      this.geocodeLatLng(parseFloat(this.userLokasi.lat), parseFloat(this.userLokasi.lng)).then(data=>{
-        this.vAlamat = data;
-      })
-      loading.dismiss();
-  }
-
-  geocodeLatLng(lat, lng) {
-    var geocoder = new google.maps.Geocoder;
-    var latlng = {lat: lat, lng: lng};
-    return new Promise(resolve => {
-      geocoder.geocode({'location': latlng}, function(results, status) {
-        if (status === 'OK') {
-          if (results[0]) {
-            resolve(results[0].formatted_address);
-          } else {
-            console.log('No results found');
-          }
-        } else {
-          console.log('Geocoder failed due to: ' + status);
-        }
-      });
-    });
+      this.vAlamat = this.userLokasi.address;
   }
   
-  openDeposit(){
-    this.navCtrl.push(DepositPage)
-  }
 
-  openSlide(){
-    this.navCtrl.push(BantuanPage);
-  }
-
-  openMap(){
-    this.navCtrl.push(MapPage);
+  convertCurr(angka){
+    var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
+    var rev2    = '';
+    for(var i = 0; i < rev.length; i++){
+        rev2  += rev[i];
+        if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
+            rev2 += '.';
+        }
+    }
+    return rev2.split('').reverse().join('');
   }
 
   logOut(){

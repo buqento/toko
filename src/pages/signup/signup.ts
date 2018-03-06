@@ -15,9 +15,10 @@ export class SignupPage {
   responseData : any;
   userData = {"username": "","password": "", "name": "","email": ""};
 
-  constructor(public navCtrl: NavController, public authService: AuthService, 
+  constructor(public navCtrl: NavController, 
+    public authService: AuthService, 
     public toastController: ToastController,
-    public loadingController: LoadingController) {
+    public loadingCtrl: LoadingController) {
   }
 
   presentToast(msg) {
@@ -34,25 +35,17 @@ export class SignupPage {
     toast.present();
   }
 
-  presentLoadingText() {
-    let loading = this.loadingController.create({
-      spinner: 'crescent',
-      showBackdrop: true,
-      duration: 1000,
-      dismissOnPageChange: true
-    });
-    loading.onDidDismiss(() => {
-      this.navCtrl.setRoot(HomePage);
-    });
-    loading.present();
-  }
-
   getRandom(length){
     return Math.floor(Math.pow(10, length-1) + Math.random() * 9 * Math.pow(10, length-1));
   }
 
   signup(){
-    this.presentLoadingText();
+    let loading = this.loadingCtrl.create({
+      spinner: 'crescent',
+      showBackdrop: true
+    })
+    loading.present();
+    setTimeout(() => { loading.dismiss(); }, 5000);
     this.authService.postData(this.userData,'signup').then((result) => {
     this.responseData = result;
       if(this.responseData.userData){
@@ -65,10 +58,9 @@ export class SignupPage {
           localStorage.setItem('userLocation','{"userLocation":{"lat":"'+this.uLat+'","lng":"'+this.uLng+'"}}');
           localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+saldo+'"}}');
           localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
-          this.presentLoadingText();
+          loading.dismiss();
       }else{ 
         this.presentToast("Nama pengguna telah terdaftar.");
-        // console.log("User already exists"); 
       }
    }, (err) => {
      // Error log

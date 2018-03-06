@@ -15,6 +15,7 @@ export class LoginPage {
   userDetails: any;
   uLat: any;
   uLng: any;
+  address: any;
   userData = {"username": "carlos","password": "111111"};
 
   constructor(public navCtrl: NavController, 
@@ -51,6 +52,7 @@ export class LoginPage {
         showBackdrop: true
       })
       loading.present();
+      setTimeout(() => { loading.dismiss(); }, 5000);
       this.authService.postData(this.userData,'login').then((result) => {
       this.responseData = result;
       if(this.responseData.userData){
@@ -59,8 +61,9 @@ export class LoginPage {
         this.userDetails = data.userData;
         this.uLat = this.userDetails.lat;
         this.uLng = this.userDetails.lng;
+        this.address = this.userDetails.address;
         let saldo: any = this.userDetails.saldo;
-        localStorage.setItem('userLocation','{"userLocation":{"lat":"'+this.uLat+'","lng":"'+this.uLng+'"}}');
+        localStorage.setItem('userLocation','{"userLocation":{"lat":"'+this.uLat+'","lng":"'+this.uLng+'","address":"'+this.address+'"}}');  
         localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+saldo+'"}}');
         localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
         loading.dismiss();

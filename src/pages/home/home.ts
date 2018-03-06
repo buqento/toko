@@ -42,6 +42,10 @@ export class HomePage {
     this.kodeBelanja = dataKodeBelanja.kodeBelanja;
     this.productPostData.kodeBelanja = this.kodeBelanja.kode;
     this.productPostData.id_user = this.userDetails.id;
+
+  }
+
+  ionViewDidLoad(){
     
     this.getProduct();
     this.getPenyedia();
@@ -58,6 +62,7 @@ export class HomePage {
       showBackdrop: true
     })
     loading.present();
+    setTimeout(() => { loading.dismiss(); }, 5000);
     this.authService.postData(this.productPostData,'getNewProduct').then((result) => {
       this.responseData = result;
       this.dataSet = this.responseData.newproductData;
@@ -83,6 +88,7 @@ export class HomePage {
       showBackdrop: true
     });
     loading.present();
+    setTimeout(() => { loading.dismiss(); }, 5000);
     this.productPostData.id = id;
     this.authService.postData(this.productPostData,'productDetail').then((result) => {
     this.responseData = result;

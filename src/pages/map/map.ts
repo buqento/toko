@@ -1,13 +1,14 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, Platform, AlertController, LoadingController, Icon } from 'ionic-angular';
+import { IonicPage, NavController, Platform, AlertController, Icon } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { AuthService } from '../../providers/auth-service/auth-service';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions, GoogleMapsAnimation,
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions, GoogleMapsAnimation, LatLng,
   // CameraPosition,
   // MarkerOptions,
-  // Marker
+  Marker
  } from '@ionic-native/google-maps';
 import { HomePage } from '../home/home';
+import { ResourceLoader } from '@angular/compiler';
 
 declare var google:any;
 
@@ -18,37 +19,29 @@ declare var google:any;
 })
 export class MapPage {
   peta: GoogleMap;
-  map: GoogleMap;
   userDetails: any;
-  Start: any;
+  userLocation: any;
   lat: any;
   lng: any;
-  dlat: any;
-  dlng: any;
-  coordinates: any;
   id_user: any;
   responseData : any;
   dataSet : any;
-  vAlamat: any;
   vLat: any;
   vLng: any;
-  userLocation: any;
-  pAlamat: any;
+  vInfoAddress: any;
   userPostData = {
     "id_user":"", 
     "coordLat":"", 
-    "coordLng":""
+    "coordLng":"",
+    "address":""
   };
 
   @ViewChild('map') mapRef:ElementRef;
   constructor(public navCtrl: NavController, 
-    public navParams: NavParams, 
     public platform: Platform,
     public authService:AuthService, 
     private googleMaps: GoogleMaps, 
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController, 
-    public loadingCtrl: LoadingController,
     private geolocation: Geolocation) {
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data.userData;
@@ -56,93 +49,78 @@ export class MapPage {
   }
 
   ionViewDidLoad() {
-    let alert = this.alertCtrl.create({
-        title: 'Tips!',
-        subTitle: 'Ketuk peta untuk menetukan alamat pengiriman.',
-        buttons: ['OK']
+    this.platform.ready().then( () => {
+      this.loadMap();
     });
-    alert.present();
-    this.loadLocation();
   }
-
-  loadLocation(){
-    const dataLocation = JSON.parse(localStorage.getItem('userLocation'));
-    this.userLocation = dataLocation.userLocation;
-    this.lat = this.userLocation.lat;
-    this.lng = this.userLocation.lng;
-    if(this.lat != 0){
-      this.geocodeLatLng(parseFloat(this.lat), parseFloat(this.lng)).then(data => {
-        this.vAlamat = data;
-        this.loadMap(this.lat, this.lng, this.vAlamat);
-      });
-    }else{
-      this.geolocation.getCurrentPosition().then(pos=>{
-        this.loadMap(pos.coords.latitude, pos.coords.longitude, 'Lokasi Anda');
-      })
-    }
-
-  }
-
-  loadMap(pLat, pLng, pAlamat) {
-    let loading = this.loadingCtrl.create({
-      spinner: 'crescent',
-      showBackdrop: true
-    })
-    loading.present();
+  
+  loadMap(){
 
     let mapOptions: GoogleMapOptions = {
       camera: {
-        target: {
-          lat: pLat,
-          lng: pLng
-        },
-        zoom: 15,
-        tilt: 30
+        target: { lat: -3.693485, lng: 128.182395 },
+        zoom: 18,
+        // tilt: 30
       }
     };
 
-    this.map = this.googleMaps.create('map', mapOptions)
-    this.map.setMyLocationEnabled(true)
-    this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-      loading.dismiss();
-        this.map.addMarker({
-          title: pAlamat,
-          position: {
-            lat: pLat,
-            lng: pLng
-          },
+    this.peta = this.googleMaps.create('map', mapOptions);
+    this.peta.one(GoogleMapsEvent.MAP_READY)
+      .then(()=>{
+        this.peta.getMyLocation().then(pos=>{
+          this.peta.animateCamera({
+            target: pos.latLng,
+            zoom: 16
+          })
+          this.geocodeLatLng(pos.latLng.lat, pos.latLng.lng).then(respon=>{
+            this.vInfoAddress = respon;
+            this.vLat = pos.latLng.lat;
+            this.vLng = pos.latLng.lng;
+          })
         })
 
-        this.map.setMapTypeId("MAP_TYPE_ROADMAP")
-        
-        this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe((data) => {
-          this.vLat = data[0].lat;
-          this.vLng = data[0].lng;
-          this.map.clear();
-          this.map.addMarker({
-            title: pAlamat,
-            position: {
-              lat: data[0].lat,
-              lng: data[0].lng
-            },
-            icon: 'https://okedeli.com/apps/images/pin.png',
+        this.peta.on(GoogleMapsEvent.MAP_DRAG_END).subscribe(()=>{
+          let pos = this.peta.getCameraTarget();
+          this.geocodeLatLng(pos.lat, pos.lng).then(respon=>{
+            this.vInfoAddress = respon;
+            this.vLat = pos.lat;
+            this.vLng = pos.lng;
           })
-          this.geocodeLatLng(parseFloat(this.vLat), parseFloat(this.vLng)).then(respon => {
-            this.showConfirm('Alamat pengiriman', respon, this.vLat, this.vLng)
-          })
-
         })
 
+        this.peta.setMyLocationEnabled(true);
+        // this.peta.addMarker({
+        //     title: 'Alamat Pengiriman',
+        //     icon: 'blue',
+        //     animation: GoogleMapsAnimation.BOUNCE,
+        //     position: result.latLng,
+        //     // position: new LatLng(21.3813892, -157.93307),
+        //     draggable: true
+        //   })
+        //   .then((marker:Marker) => {
+        //     marker.on(GoogleMapsEvent.MARKER_CLICK)
+        //       .subscribe(() => {
+        //         alert('Drag marker untuk menentukan alamat pengiriman');
+        //      });
+    
+        //     marker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe( (data) => {
+        //       this.vLat = data[0].lat;
+        //       this.vLng = data[0].lng;
+        //       this.geocodeLatLng(parseFloat(this.vLat), parseFloat(this.vLng)).then(respon => {
+        //         this.showConfirm('Alamat pengiriman', respon, this.vLat, this.vLng)
+        //       })
+        //     })
+        //   })
       })
   }
 
-  showConfirm(title, message, lat, lng) {
+  showConfirm() {
     let confirm = this.alertCtrl.create({
-      title: title,
-      message: message,
+      title: 'Alamat Pengiriman',
+      message: this.vInfoAddress,
       buttons: [
         {
-          text: 'Tidak',
+          text: 'Alamat lain',
           handler: () => {
             console.log('Disagree clicked');
           }
@@ -150,25 +128,26 @@ export class MapPage {
         {
           text: 'Simpan',
           handler: () => {
-            this.ubahLokasi(lat, lng);
+            this.updateLokasi(this.vLat, this.vLng, this.vInfoAddress);
           }
         }
       ]
-    });
+    })
     confirm.present();
   }
 
-  ubahLokasi(lat, lng){
+  updateLokasi(lat, lng, address){
     this.userPostData.coordLat = lat;
     this.userPostData.coordLng = lng;
+    this.userPostData.address = address;
     this.authService.postData(this.userPostData,'updateLokasi').then((result) => {
     this.responseData = result;
     this.dataSet = this.responseData.lokasiData;
-    localStorage.setItem('userLocation','{"userLocation":{"lat":"'+lat+'","lng":"'+lng+'"}}');  
+    localStorage.setItem('userLocation','{"userLocation":{"lat":"'+lat+'","lng":"'+lng+'","address":"'+address+'"}}');  
     this.navCtrl.setRoot(HomePage);
     }, (err) => {
       // Error log
-    });
+    })
   }
 
   geocodeLatLng(lat, lng) {

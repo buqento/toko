@@ -44,6 +44,7 @@ export class DetailPage {
   ongKir:any;
   uLat: any;
   uLng: any;
+  address: any;
   hargaItem: any;
   id: any;
   like: any;
@@ -74,7 +75,6 @@ export class DetailPage {
       this.userDetails = data.userData;
       const dataKodeBelanja = JSON.parse(localStorage.getItem('kodeBelanja'));
       this.kodeBelanja = dataKodeBelanja.kodeBelanja;
-
       let pData = navParams.get('productDetail');
       this.nama = pData[0].nama;
       this.foto = pData[0].foto;
@@ -84,6 +84,7 @@ export class DetailPage {
       this.harga_satuan = pData[0].harga_satuan;
       this.vHargaSatuan = this.convertCurr(pData[0].harga_satuan);
       this.vPenjual = pData[0].nama_penyedia;
+      this.vAlamatPenjual = pData[0].alamat;
       this.userPostData.id_user = this.userDetails.id;
       this.userPostData.kode_item = pData[0].kode_item;
       this.userPostData.id = pData[0].id;
@@ -98,15 +99,10 @@ export class DetailPage {
     this.userLocation = dataLocation.userLocation;
     this.uLat = this.userLocation.lat;
     this.uLng = this.userLocation.lng;
+    this.vAlamat = this.userLocation.address;
     const dataSaldo = JSON.parse(localStorage.getItem('userSaldo'));
     this.userSaldos = dataSaldo.userSaldo;
     this.updateSaldo = this.convertCurr(this.userSaldos.saldo);
-    this.geocodeLatLng(parseFloat(this.uLat), parseFloat(this.uLng)).then(data => {
-      this.vAlamat = data;
-    });
-    this.geocodeLatLng(parseFloat(this.dlat), parseFloat(this.dlng)).then(data => {
-      this.vAlamatPenjual = data;
-    });
     this.distance(parseFloat(this.uLat), parseFloat(this.uLng), this.dlat, this.dlng, "K").then(data => {
       this.vJarak = data;
       this.ongKir = 1500 * parseInt(this.vJarak);
@@ -179,6 +175,7 @@ export class DetailPage {
           showBackdrop: true
         })
         loading.present();
+        setTimeout(() => { loading.dismiss(); }, 5000);
         this.authService.postData(this.userPostData,'addToBasket').then((result) => {
           this.responseData = result;
           this.dataSet = this.responseData.productData;
@@ -194,24 +191,6 @@ export class DetailPage {
     }else{
       this.presentToast("Masukkan jumlah produk.");
     }
-  }
-
-  geocodeLatLng(lat, lng) {
-    var geocoder = new google.maps.Geocoder;
-    var latlng = {lat: lat, lng: lng};
-    return new Promise(resolve => {
-      geocoder.geocode({'location': latlng}, function(results, status) {
-        if (status === 'OK') {
-          if (results[0]) {
-            resolve(results[0].formatted_address);
-          } else {
-            console.log('No results found');
-          }
-        } else {
-          console.log('Geocoder failed due to: ' + status);
-        }
-      });
-    });
   }
 
   distance(lat1, lon1, lat2, lon2, unit) {

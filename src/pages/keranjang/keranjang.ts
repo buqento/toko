@@ -128,17 +128,18 @@ export class KeranjangPage {
     this.responseData = result;
     this.dataSet = this.responseData.userDataBasket;
     this.totalPembayaran = this.dataSet[0].items_total;
-    });
+
+    }).then(()=>{
       if(parseInt(this.updateSaldo) < parseInt(this.totalPembayaran)){
         this.navCtrl.push(DepositPage);
         this.showConfirmSaldo();
       }else{
-        //update status belanja
+        // update status belanja
         this.productPostData.kodeBelanja = this.kodeBelanja.kode;
         this.authService.postData(this.productPostData,'ubahStatusBelanja');
         this.showAlert();
         //update user saldo
-        this.saldoSekarang = parseInt(this.updateSaldo) - parseInt(this.itemtotal);
+        this.saldoSekarang = this.updateSaldo - parseInt(this.totalPembayaran);
         localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+this.saldoSekarang+'"}}');
         this.productPostData.saldo = this.saldoSekarang;
         this.authService.postData(this.productPostData,'updateSaldo');
@@ -146,6 +147,7 @@ export class KeranjangPage {
         localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
         this.navCtrl.push(OrderPage);
       }
+    })
   }
 
   getProduct(){

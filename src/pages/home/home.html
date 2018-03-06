@@ -30,39 +30,39 @@
         </ion-fab-list>
     </ion-fab>
 
-    <ion-scroll scrollX="true" style="width:100%;height:80px">
+    <ion-scroll scrollX="true" style="width:100%;height:70px">
         <div class="inner">
             <ion-grid>
                 <ion-row no-padding>
-                  <ion-col col-2 (click)="getProductCategory(3, 'Kue')">
-                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/category/Food-Cheese-icon.png">
+                  <ion-col col-2 (click)="getProductCategory(3, 'Cakes')">
+                      <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                          <img src="https://okedeli.com/apps/images/category/cake64.png">
                       </div>
                   </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(4, 'Cemilan')">
-                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/category/Food-French-Fries-icon.png">
-                      </div>
+                  <ion-col col-2 (click)="getProductCategory(4, 'Fast Food')">
+                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/category/pizza64.png">
+                    </div>
                   </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(1, 'Ayam')">
-                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/category/Chicken-Leg-icon.png">
-                      </div>
+                  <ion-col col-2 (click)="getProductCategory(1, 'Chicken Food')">
+                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/category/chicken48.png">
+                    </div>
                   </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(2, 'Cepat Saji')">
-                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/category/Food-Noodles-icon.png">
-                      </div>
+                  <ion-col col-2 (click)="getProductCategory(2, 'Food')">
+                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/category/food64.png">
+                    </div>
                   </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(5, 'Minuman')">
-                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/category/Food-Coffee-To-Go-icon.png">
-                      </div>
+                  <ion-col col-2 (click)="getProductCategory(5, 'Drink')">
+                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/category/drink64.png">
+                    </div>
                   </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(6, 'Buah')">
-                      <div style="background-color:#fbe9e7;width:70px;height:70px;border-radius:50%">
-                          <img src="https://okedeli.com/apps/images/category/Fruits-icon.png">
-                      </div>
+                  <ion-col col-2 (click)="getProductCategory(6, 'Fruits')">
+                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/category/fruit64.png">
+                    </div>
                   </ion-col>
                 </ion-row>
             </ion-grid>
@@ -77,6 +77,15 @@
           refreshingText="Pembaruan...">
         </ion-refresher-content>
     </ion-refresher>
+    <!-- <ion-list [virtualScroll]="dataSet" approxItemHeight="20px">
+        <ion-item *virtualItem="let item" (click)="getProductDetail(item.id)">
+            <ion-avatar item-start>
+                <ion-img [src]="item.img_product"></ion-img>
+            </ion-avatar>
+                <div><strong>{{item.nama}}</strong></div>
+                <small>{{item.harga_satuan}}</small>
+        </ion-item>
+    </ion-list> -->
 
     <div padding>
         <ion-segment [(ngModel)]="produk">
@@ -91,27 +100,23 @@
                 
       <div [ngSwitch]="produk">
         <ion-list *ngSwitchCase="'populer'">
-          <ion-grid no-padding fixed>
-            <ion-row>
-              <ion-col col-6 *ngFor="let item of dataSet" (click)="getProductDetail(item.id)">
-                <ion-item no-lines>
-                  <img src="https://okedeli.com/apps/images/{{item.foto}}"> 
-                  <p color="primary"><strong>{{item.nama}}</strong></p>
-                  <p color="primary">Rp.{{item.harga_satuan}}</p>
-                </ion-item>
-                <ion-item>
-                  <p>
-                    <ion-icon name="text"></ion-icon>
-                    {{item.jml}}
-                  </p>
-                  <p item-end>                        
-                    <ion-icon color="primary" name="heart"></ion-icon>
-                    {{item.suka}}
-                  </p>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+
+            <ion-grid no-padding fixed>
+                <ion-row>
+                  <ion-col col-6 *ngFor="let item of dataSet" (click)="getProductDetail(item.id)">
+                    <ion-card>
+                      <img src="https://okedeli.com/apps/images/{{item.foto}}"/>
+                      <ion-card-content no-padding>
+                          <ion-item>
+                            <p><strong>{{item.nama}}</strong></p>
+                            <p><small>Rp.{{item.harga_satuan}}</small></p>
+                          </ion-item>
+                      </ion-card-content>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+            </ion-grid>
+
         </ion-list>
                 
         <ion-list *ngSwitchCase="'penyedia'">

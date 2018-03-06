@@ -19,11 +19,11 @@
         </ion-item>
         <ion-item text-wrap>
             <p>{{vAlamat}}</p>
-            <ion-icon color="primarydark" small name="create" item-end (click)="openMap()"></ion-icon>
+            <ion-icon color="primarydark" small name="create" item-end [navPush]="pushMap"></ion-icon>
         </ion-item>
         <ion-item>
             <p>Saldo <strong>Rp.{{userSaldos.saldo}}</strong></p>
-            <ion-icon color="primarydark" small name="add" item-end (click)="openDeposit()"></ion-icon>           
+            <ion-icon color="primarydark" small name="add" item-end [navPush]="pushDeposit"></ion-icon>           
         </ion-item>
     </ion-list>
   
@@ -42,7 +42,7 @@
     </ion-list>
   
     <ion-list>
-          <ion-item (click)="openSlide()">
+          <ion-item [navPush]="pushBantuan">
               <ion-icon name="bulb" item-start></ion-icon>
               Tips Berbelanja
           </ion-item>
