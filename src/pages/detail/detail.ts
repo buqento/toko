@@ -6,8 +6,6 @@ import { KeranjangPage } from '../keranjang/keranjang';
 import { HomePage } from '../home/home';
 import { MapPage } from '../map/map';
 
-declare var google:any;
-
 @IonicPage()
 @Component({
   selector: 'page-detail',

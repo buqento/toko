@@ -21,7 +21,7 @@
 
         <ion-grid no-padding fixed>
                 <ion-row>
-                  <ion-col col-6 *ngFor="let item of dataSet;  let msgIndex = index" (click)="getProductDetail(item.id)">
+                  <ion-col col-6 *ngFor="let item of dataSet;  let msgIndex = index">
                     <ion-card>
                       <img src="https://okedeli.com/apps/images/{{item.foto}}"/>
                       <ion-card-content no-padding>
@@ -31,8 +31,8 @@
                         </ion-item>
                         <ion-item>
                                 <p item-start><small>{{item.dt_belanja | amTimeAgo}}</small></p>
-                                <p item-end (click)="deleteOrder(item.id_belanja, msgIndex)">                        
-                                    <ion-icon name="close" item-end (click)="deleteOrder(item.id_belanja, msgIndex)"></ion-icon>
+                                <p item-end>                        
+                                    <ion-icon name="close" item-end (click)="confirmDelete(item.id_belanja, msgIndex)"></ion-icon>
                                 </p>
                         </ion-item>
                       </ion-card-content>
@@ -53,7 +53,7 @@
                 </ion-item>
             </ion-col>
             <ion-col col-5>
-                <button ion-button icon-start full color="primarydark" (click)="showConfirmPembayaran()">
+                <button ion-button icon-start full color="primarydark" (click)="confirmPembayaran()">
                     <ion-icon name="checkmark-circle"></ion-icon>
                     Bayar
                 </button>

@@ -1,14 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, Platform, AlertController, Icon } from 'ionic-angular';
-import { Geolocation } from '@ionic-native/geolocation';
+import { IonicPage, NavController, Platform, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions, GoogleMapsAnimation, LatLng,
-  // CameraPosition,
-  // MarkerOptions,
-  Marker
- } from '@ionic-native/google-maps';
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions } from '@ionic-native/google-maps';
 import { HomePage } from '../home/home';
-import { ResourceLoader } from '@angular/compiler';
 
 declare var google:any;
 
@@ -41,8 +35,7 @@ export class MapPage {
     public platform: Platform,
     public authService:AuthService, 
     private googleMaps: GoogleMaps, 
-    public alertCtrl: AlertController,
-    private geolocation: Geolocation) {
+    public alertCtrl: AlertController) {
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data.userData;
       this.userPostData.id_user = this.userDetails.id;

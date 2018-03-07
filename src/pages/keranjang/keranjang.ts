@@ -32,8 +32,10 @@ export class KeranjangPage {
     "id":""
   };
 
-  constructor(public navCtrl: NavController, public loadingCtrl:LoadingController,
-    public toastCtrl:ToastController, public alertCtrl: AlertController, public authService: AuthService) {
+  constructor(public navCtrl: NavController, 
+    public loadingCtrl:LoadingController,
+    public alertCtrl: AlertController, 
+    public authService: AuthService) {
     this.pushPage = HomePage;
     const data = JSON.parse(localStorage.getItem('userData'));
     this.userDetails = data.userData;
@@ -49,32 +51,22 @@ export class KeranjangPage {
     this.updateSaldo = this.userSaldo.saldo;
     this.vSaldo = this.convertCurr(this.updateSaldo);
   }
-  
-  presentToast(msg) {
-    let toast = this.toastCtrl.create({
-      message: msg,
-      duration: 3000,
-      position: 'top',
-    });
-    toast.present();
-  }
 
-  showConfirmSaldo() {
+  confirmDelete(id, msgIndex) {
     let confirm = this.alertCtrl.create({
-      title: 'Ups!',
-      message: 'Deposit saldo anda tidak cukup untuk melakukan pembayaran. Deposit saldo sekarang?',
+      title: 'Hapus produk?',
+      message: 'Anda setuju untuk menghapus produk ini dari keranjang?',
       buttons: [
         {
           text: 'Tidak',
           handler: () => {
-            this.navCtrl.push(KeranjangPage);
-            // console.log('Disagree clicked');
+            console.log('Disagree clicked');
           }
         },
         {
-          text: 'Tambah Deposit',
+          text: 'Ya',
           handler: () => {
-            // this.navCtrl.push(DepositPage);
+            this.deleteProduct(id, msgIndex);
           }
         }
       ]
@@ -82,7 +74,7 @@ export class KeranjangPage {
     confirm.present();
   }
 
-  showConfirmPembayaran() {
+  confirmPembayaran() {
     let confirm = this.alertCtrl.create({
       title: 'Lakukan pembayaran?',
       message: 'Anda setuju untuk melakukan pembayaran semua produk yang ada pada keranjang?',
@@ -132,7 +124,6 @@ export class KeranjangPage {
     }).then(()=>{
       if(parseInt(this.updateSaldo) < parseInt(this.totalPembayaran)){
         this.navCtrl.push(DepositPage);
-        this.showConfirmSaldo();
       }else{
         // update status belanja
         this.productPostData.kodeBelanja = this.kodeBelanja.kode;
@@ -163,7 +154,7 @@ export class KeranjangPage {
       })
   }
 
-  deleteOrder(id_belanja, msgIndex){
+  deleteProduct(id_belanja, msgIndex){
     if(id_belanja > 0){
       this.productPostData.id_belanja = id_belanja;
       this.authService.postData(this.productPostData,'orderDelete').then((result) => {

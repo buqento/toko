@@ -3,7 +3,7 @@
     <name>toko</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.15.36:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -87,5 +87,7 @@
     <plugin name="cordova-plugin-googlemaps" spec="^2.2.5">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyDd0lW7xp3LXtj05re_mMpHvaObIOlKObs" />
     </plugin>
+    <allow-navigation href="http://192.168.15.36:8100" />
     <engine name="android" spec="~7.0.0" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
 </widget>
