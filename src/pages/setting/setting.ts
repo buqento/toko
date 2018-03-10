@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { NavController, App } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 import { DepositPage } from '../deposit/deposit';
 import { BantuanPage } from '../bantuan/bantuan';
-import { HomePage } from '../home/home';
-import { LoginPage } from '../login/login';
 import { MapPage } from '../map/map';
+import { LoginPage } from '../login/login';
 
+@IonicPage()
 @Component({
-  selector: 'page-akun',
-  templateUrl: 'akun.html'
+  selector: 'page-setting',
+  templateUrl: 'setting.html',
 })
-export class AkunPage {
+export class SettingPage {
   pushDeposit: any;
   pushBantuan: any;
   pushMap: any;
@@ -21,7 +21,7 @@ export class AkunPage {
   userLocation: any;
   vUserSaldo: any;
 
-  constructor(public navCtrl: NavController, public app: App) {
+  constructor(public navCtrl: NavController) {
       this.pushDeposit = DepositPage;
       this.pushBantuan = BantuanPage;
       this.pushMap = MapPage;

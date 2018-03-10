@@ -5,6 +5,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { KeranjangPage } from '../keranjang/keranjang';
 import { HomePage } from '../home/home';
 import { MapPage } from '../map/map';
+import { UlasanPage } from '../ulasan/ulasan';
 
 @IonicPage()
 @Component({
@@ -46,6 +47,7 @@ export class DetailPage {
   hargaItem: any;
   id: any;
   like: any;
+  vJml: any;
   userPostData = {
     //suka produk
     "id":"",
@@ -73,23 +75,40 @@ export class DetailPage {
       this.userDetails = data.userData;
       const dataKodeBelanja = JSON.parse(localStorage.getItem('kodeBelanja'));
       this.kodeBelanja = dataKodeBelanja.kodeBelanja;
-      let pData = navParams.get('productDetail');
-      this.nama = pData[0].nama;
-      this.foto = pData[0].foto;
-      this.dlat = pData[0].lat;
-      this.dlng = pData[0].lng;
-      this.like = pData[0].suka;
-      this.harga_satuan = pData[0].harga_satuan;
-      this.vHargaSatuan = this.convertCurr(pData[0].harga_satuan);
-      this.vPenjual = pData[0].nama_penyedia;
-      this.vAlamatPenjual = pData[0].alamat;
+
+      this.nama = this.navParams.get('pNama');
+      this.foto = this.navParams.get('pFoto');
+      this.dlat = this.navParams.get('pLat');
+      this.dlng = this.navParams.get('pLng');
+      this.like = this.navParams.get('pSuka');
+      this.harga_satuan = this.navParams.get('pHargaSatuan');
+      this.vPenjual = this.navParams.get('pNamaPenyedia');
+      this.vAlamatPenjual = this.navParams.get('pAlamat');
+      this.userPostData.id_user = this.navParams.get('pNama');
+      this.userPostData.kode_item = this.navParams.get('pKodeItem');
+      this.userPostData.id = this.navParams.get('pId');
+      this.userPostData.id_penyedia = this.navParams.get('pIdPenyedia');
+      this.userPostData.kode_item = this.navParams.get('pKodeItem');
+      this.vJml = this.navParams.get('pJml');
+
+      this.vHargaSatuan = this.convertCurr(this.harga_satuan);
       this.userPostData.id_user = this.userDetails.id;
-      this.userPostData.kode_item = pData[0].kode_item;
-      this.userPostData.id = pData[0].id;
-      this.userPostData.id_penyedia = pData[0].id_penyedia;
       this.userPostData.lat = this.userDetails.lat;
       this.userPostData.lng = this.userDetails.lng;
       this.userPostData.kode_belanja = this.kodeBelanja.kode;
+
+      // let pData = navParams.get('productDetail');
+      // this.nama = pData[0].nama;
+      // this.foto = pData[0].foto;
+      // this.dlat = pData[0].lat;
+      // this.dlng = pData[0].lng;
+      // this.like = pData[0].suka;
+      // this.harga_satuan = pData[0].harga_satuan;
+      // this.vPenjual = pData[0].nama_penyedia;
+      // this.vAlamatPenjual = pData[0].alamat;
+      // this.userPostData.kode_item = pData[0].kode_item;
+      // this.userPostData.id = pData[0].id;
+      // this.userPostData.id_penyedia = pData[0].id_penyedia;
   }
 
   ionViewDidLoad(){
@@ -108,6 +127,11 @@ export class DetailPage {
       this.tHarga = parseInt(this.ongKir);
       this.vTHarga = this.convertCurr(this.tHarga);
     });
+  }
+
+  getUlasan(kode_item, nama_produk){
+    let data = { kodeItem: kode_item, namaProduk: nama_produk}
+    this.navCtrl.push(UlasanPage, data);
   }
 
   sukaProduct(){  

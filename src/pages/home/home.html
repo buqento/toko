@@ -24,7 +24,7 @@
           </button>
         </ion-fab-list>
         <ion-fab-list side="left">
-            <button ion-fab color="primarydark" [navPush]="PushAkun">
+            <button ion-fab color="primarydark" [navPush]="PushSetting">
                 <ion-icon name="person"></ion-icon>
             </button>
         </ion-fab-list>
@@ -35,33 +35,33 @@
             <ion-grid>
                 <ion-row no-padding>
                   <ion-col col-2 (click)="getProductCategory(3, 'Cakes')">
-                      <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
-                          <img src="https://okedeli.com/apps/images/foodset/if_Food_C219_2427861.png">
+                      <div style="padding:3px;background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                          <img src="https://okedeli.com/apps/images/foodset/pudding.svg">
                       </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(4, 'Fast Food')">
-                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
-                        <img src="https://okedeli.com/apps/images/foodset/if_Food_C208_2427853.png">
+                    <div style="padding:3px;background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/foodset/fast-food.svg">
                     </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(1, 'Chicken Food')">
-                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
-                        <img src="https://okedeli.com/apps/images/foodset/if_Food_C223_2427864.png">
+                    <div style="padding:3px;background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/foodset/chicken.svg">
                     </div>
                   </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(2, 'Food')">
-                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
-                        <img src="https://okedeli.com/apps/images/foodset/if_Food_C213_2427867.png">
+                  <ion-col col-2 (click)="getProductCategory(2, 'General Food')">
+                    <div style="padding:3px;background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/foodset/rice.svg">
                     </div>
                   </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(5, 'Drink')">
-                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
-                        <img src="https://okedeli.com/apps/images/foodset/if_Drinks-46_1200441.png">
+                  <ion-col col-2 (click)="getProductCategory(5, 'Drinks')">
+                    <div style="padding:3px;background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/foodset/tea.svg">
                     </div>
                   </ion-col>
                   <ion-col col-2 (click)="getProductCategory(6, 'Fruits')">
-                    <div style="background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
-                        <img src="https://okedeli.com/apps/images/foodset/if_Food_C240_2427880.png">
+                    <div style="padding:3px;background-color:#fff;width:60px;height:60px;border-radius:30%;border-style:solid;border-color:#c8b7b5;border-width: 1pt;">
+                        <img src="https://okedeli.com/apps/images/foodset/salad.svg">
                     </div>
                   </ion-col>
                 </ion-row>
@@ -103,7 +103,7 @@
 
             <ion-grid no-padding fixed>
                 <ion-row>
-                  <ion-col col-6 *ngFor="let item of dataSet" (click)="getProductDetail(item.id)">
+                  <ion-col col-6 *ngFor="let item of dataSet" (click)="openDetail(item.nama, item.foto, item.lat, item.lng, item.suka, item.harga_satuan, item.nama_penyedia, item.alamat, item.kode_item, item.id, item.id_penyedia, item.jml)">
                     <ion-card>
                       <img src="https://okedeli.com/apps/images/{{item.foto}}"/>
                       <ion-card-content no-padding>

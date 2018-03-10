@@ -9,19 +9,20 @@ import { MyApp } from './app.component';
 import { HttpModule } from '@angular/http';
 import { AuthService } from '../providers/auth-service/auth-service';
 import { Geolocation } from '@ionic-native/geolocation';
-import { GoogleMaps } from '@ionic-native/google-maps';1
+import { GoogleMaps } from '@ionic-native/google-maps';
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
+import { BantuanPage } from '../pages/bantuan/bantuan';
 import { DetailPage } from '../pages/detail/detail';
 import { PenyediaPage } from '../pages/penyedia/penyedia';
 import { KategoriPage } from '../pages/kategori/kategori';
 import { KeranjangPage } from '../pages/keranjang/keranjang';
 import { OrderPage } from '../pages/order/order';
 import { DepositPage } from '../pages/deposit/deposit';
-import { BantuanPage } from '../pages/bantuan/bantuan';
-import { AkunPage } from '../pages/akun/akun';
 import { MapPage } from '../pages/map/map';
 import { SignupPage } from '../pages/signup/signup';
+import { SettingPage } from '../pages/setting/setting';
+import { UlasanPage } from '../pages/ulasan/ulasan';
 
 @NgModule({
   declarations: [
@@ -35,9 +36,10 @@ import { SignupPage } from '../pages/signup/signup';
     OrderPage,
     DepositPage,
     BantuanPage,
-    AkunPage,
     MapPage,
-    SignupPage
+    SignupPage,
+    SettingPage,
+    UlasanPage
   ],
   imports: [
     BrowserModule, HttpModule, MomentModule,
@@ -55,9 +57,10 @@ import { SignupPage } from '../pages/signup/signup';
     OrderPage,
     DepositPage,
     BantuanPage,
-    AkunPage,
     MapPage,
-    SignupPage
+    SignupPage,
+    SettingPage,
+    UlasanPage
   ],
   providers: [
     StatusBar,

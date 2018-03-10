@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the UlasanPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
+import { AuthService } from '../../providers/auth-service/auth-service';
 
 @IonicPage()
 @Component({
@@ -14,12 +8,64 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'ulasan.html',
 })
 export class UlasanPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  productPostData = {"menu_kode_item":""};
+  ulasanData = {"kode_item":"", "komentar":""};
+  ulasanPostData = {"nama_pengguna":"", "menu_kode_item":"", "komentar":""};
+  responseData: any;
+  dataSet: any;
+  vNama_produk: any;
+  userDetails: any;
+  constructor(public navCtrl: NavController, 
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
+    public authService: AuthService,
+    public navParams: NavParams,) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad UlasanPage');
+    let kode_item = this.navParams.get('kodeItem');
+    let nama_produk = this.navParams.get('namaProduk');
+    this.getUlasan(kode_item);
+    this.vNama_produk = nama_produk;
+  }
+
+  getUlasan(kode_item){
+    let loading = this.loadingCtrl.create({
+      spinner: 'crescent',
+      showBackdrop: true,
+    })
+    loading.present();
+    setTimeout(() => { loading.dismiss(); }, 5000);
+    this.productPostData.menu_kode_item = kode_item;
+    this.authService.postData(this.productPostData, 'productUlasan').then((result)=>{
+      this.responseData = result;
+      this.dataSet = this.responseData.productUlasan;
+    })
+    loading.dismiss();
+  }
+
+  postUlasan(){
+    if(this.ulasanPostData.komentar){
+      const data = JSON.parse(localStorage.getItem('userData'));
+      this.userDetails = data.userData;
+      let menu_kode_item = this.navParams.get('kodeItem');
+      this.ulasanPostData.menu_kode_item = menu_kode_item;
+      this.ulasanPostData.nama_pengguna = this.userDetails.full_name;
+      this.authService.postData(this.ulasanPostData, 'addUlasan').then((result)=>{
+        this.responseData = result;
+        if(this.responseData.success){
+          this.getUlasan(menu_kode_item);
+          this.ulasanPostData.komentar = "";
+        }
+      })
+    }else{
+      let toast = this.toastCtrl.create({
+        message: 'Masukkan ulasan',
+        duration: 1000,
+        position: 'top'
+      })
+      toast.present()
+    }
   }
 
 }

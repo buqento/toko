@@ -38,23 +38,22 @@ export class PenyediaPage {
     });
   }
 
-  getProductDetail(id){
-    this.productPostData.id = id;
-    this.authService.postData(this.productPostData,'productDetail').then((result) => {
-    this.responseData = result;
-    let loading = this.loadingCtrl.create({
-      spinner: 'crescent',
-      showBackdrop: true,
-      duration: 1000,
-      dismissOnPageChange: true
-    });
-    loading.onDidDismiss(() => {
-      this.navCtrl.push(DetailPage, result);
-    });
-    loading.present();
-    }, (err) => {
-      // Error log
-    });
+  openDetail(nama, foto, lat, lng, suka, harga_satuan, nama_penyedia, alamat, kode_item, id, id_penyedia, jml){
+    let data2 = { 
+      pNama:nama,
+      pFoto:foto, 
+      pLat:lat, 
+      pLng:lng, 
+      pSuka:suka, 
+      pHargaSatuan:harga_satuan, 
+      pNamaPenyedia:nama_penyedia, 
+      pAlamat:alamat, 
+      pKodeItem:kode_item, 
+      pId:id, 
+      pIdPenyedia:id_penyedia,
+      pJml:jml
+    }
+    this.navCtrl.push(DetailPage, data2);
   }
 
 }

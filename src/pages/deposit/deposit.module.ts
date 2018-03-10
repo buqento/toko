@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { DepositPage } from './deposit';
+// import { IonicPageModule } from 'ionic-angular';
+// import { DepositPage } from './deposit';
 
 @NgModule({
   declarations: [
-    DepositPage,
+    // DepositPage,
   ],
-  imports: [
-    IonicPageModule.forChild(DepositPage),
-  ],
+  // imports: [
+  //   IonicPageModule.forChild(DepositPage),
+  // ],
 })
 export class DepositPageModule {}

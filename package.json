@@ -1,8 +1,8 @@
 {
-  "name": "toko",
+  "name": "okedeli",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "author": "Buqento Richard",
+  "homepage": "http://okedeli.com/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -27,7 +27,7 @@
     "@ionic-native/status-bar": "4.4.0",
     "@ionic/storage": "2.1.3",
     "angular2-moment": "^1.8.0",
-    "cordova-android": "~7.0.0",
+    "cordova-android": "^7.0.0",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-googlemaps": "^2.2.5",
@@ -47,7 +47,7 @@
     "@ionic/app-scripts": "3.1.8",
     "typescript": "2.4.2"
   },
-  "description": "An Ionic project",
+  "description": "Online delivery app",
   "cordova": {
     "plugins": {
       "cordova-plugin-geolocation": {

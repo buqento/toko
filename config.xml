@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>toko</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.15.36:8100" />
+<widget id="com.okedeli.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>OkeDeli</name>
+    <description>Online delivery app.</description>
+    <author email="hi@okedeli" href="http://okedeli.com/">Okedeli Develop Team</author>
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -88,6 +88,6 @@
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyDd0lW7xp3LXtj05re_mMpHvaObIOlKObs" />
     </plugin>
     <allow-navigation href="http://192.168.15.36:8100" />
-    <engine name="android" spec="~7.0.0" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

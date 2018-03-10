@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, AlertController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { HomePage } from '../home/home';
 import { OrderPage } from '../order/order';
@@ -142,6 +142,12 @@ export class KeranjangPage {
   }
 
   getProduct(){
+      let loading = this.loadingCtrl.create({
+        spinner: 'crescent',
+        showBackdrop: true,
+      })
+      loading.present();
+      setTimeout(() => { loading.dismiss(); }, 5000);
       this.productPostData.kodeBelanja = this.kodeBelanja.kode;
       this.authService.postData(this.productPostData,'userBasket').then((result) => {
       this.responseData = result;
@@ -152,6 +158,7 @@ export class KeranjangPage {
         this.navCtrl.push(HomePage);
       }
       })
+      loading.dismiss();
   }
 
   deleteProduct(id_belanja, msgIndex){

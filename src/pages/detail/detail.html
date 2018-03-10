@@ -11,6 +11,8 @@
         <ion-item>
             <p><strong>{{nama}}</strong></p>
             <p>Rp.{{vHargaSatuan}}</p>
+            <p item-end>{{vJml}}</p>
+            <ion-icon item-end color="primary" name="chatbubbles" (click)="getUlasan(userPostData.kode_item, nama)"></ion-icon>
             <p item-end>{{like}}</p>
             <ion-icon item-end color="primary" name="heart" (click)="sukaProduct()"></ion-icon>
         </ion-item>

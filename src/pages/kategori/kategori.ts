@@ -28,6 +28,24 @@ export class KategoriPage {
     this.getProduct(kategori);
   }
 
+  openDetail(nama, foto, lat, lng, suka, harga_satuan, nama_penyedia, alamat, kode_item, id, id_penyedia, jml){
+    let data2 = { 
+      pNama:nama,
+      pFoto:foto, 
+      pLat:lat, 
+      pLng:lng, 
+      pSuka:suka, 
+      pHargaSatuan:harga_satuan, 
+      pNamaPenyedia:nama_penyedia, 
+      pAlamat:alamat, 
+      pKodeItem:kode_item, 
+      pId:id, 
+      pIdPenyedia:id_penyedia,
+      pJml:jml
+    }
+    this.navCtrl.push(DetailPage, data2);
+  }
+
   getProduct(kategori){
     let loading = this.loadingCtrl.create({
       spinner: 'crescent',
@@ -39,14 +57,6 @@ export class KategoriPage {
       this.responseData = result;
       this.dataSet = this.responseData.detailKategori;
       loading.dismiss();
-    });
-  }
-
-  getProductDetail(id){
-    this.productPostData.id = id;
-    this.authService.postData(this.productPostData,'productDetail').then((result) => {
-      this.responseData = result;
-      this.navCtrl.push(DetailPage, result);
     });
   }
 

@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, Platform, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, Platform, AlertController, ActionSheetController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions } from '@ionic-native/google-maps';
 import { HomePage } from '../home/home';
@@ -23,6 +23,7 @@ export class MapPage {
   vLat: any;
   vLng: any;
   vInfoAddress: any;
+  vAlamat: any;
   userPostData = {
     "id_user":"", 
     "coordLat":"", 
@@ -32,6 +33,7 @@ export class MapPage {
 
   @ViewChild('map') mapRef:ElementRef;
   constructor(public navCtrl: NavController, 
+    public actionSheetCtrl: ActionSheetController,
     public platform: Platform,
     public authService:AuthService, 
     private googleMaps: GoogleMaps, 
@@ -46,6 +48,30 @@ export class MapPage {
       this.loadMap();
     });
   }
+
+  presentActionSheet(respon) {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: 'Current Address',
+
+      buttons: [
+        {
+          text: respon,
+          handler: () => {
+            console.log('Archive clicked');
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+    setTimeout(() => { actionSheet.dismiss(); }, 3000);
+  }
+
   
   loadMap(){
 
@@ -78,8 +104,11 @@ export class MapPage {
             this.vInfoAddress = respon;
             this.vLat = pos.lat;
             this.vLng = pos.lng;
+            // this.presentActionSheet(respon);
           })
         })
+
+
 
         this.peta.setMyLocationEnabled(true);
         // this.peta.addMarker({
