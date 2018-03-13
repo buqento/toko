@@ -52,6 +52,7 @@ export class KategoriPage {
       showBackdrop: true
     });
     loading.present();
+    setTimeout(() => { loading.dismiss(); }, 5000);
     this.productPostData.kategori = kategori;
     this.authService.postData(this.productPostData,'productDetailKategori').then((result) => {
       this.responseData = result;

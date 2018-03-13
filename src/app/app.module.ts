@@ -23,6 +23,8 @@ import { MapPage } from '../pages/map/map';
 import { SignupPage } from '../pages/signup/signup';
 import { SettingPage } from '../pages/setting/setting';
 import { UlasanPage } from '../pages/ulasan/ulasan';
+import { Network } from '@ionic-native/network';
+import { KoneksiComponent } from '../components/koneksi/koneksi';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,8 @@ import { UlasanPage } from '../pages/ulasan/ulasan';
     MapPage,
     SignupPage,
     SettingPage,
-    UlasanPage
+    UlasanPage,
+    KoneksiComponent
   ],
   imports: [
     BrowserModule, HttpModule, MomentModule,
@@ -60,12 +63,14 @@ import { UlasanPage } from '../pages/ulasan/ulasan';
     MapPage,
     SignupPage,
     SettingPage,
-    UlasanPage
+    UlasanPage,
+    KoneksiComponent
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Network,
     AuthService,
     GoogleMaps,
     Geolocation

@@ -19,8 +19,7 @@ export class SettingPage {
   userSaldos: any;
   vAlamat: any;
   userLocation: any;
-  vUserSaldo: any;
-
+  saldoNow: any;
   constructor(public navCtrl: NavController) {
       this.pushDeposit = DepositPage;
       this.pushBantuan = BantuanPage;
@@ -29,13 +28,12 @@ export class SettingPage {
       this.userDetails = data.userData;
       const dataSaldo = JSON.parse(localStorage.getItem('userSaldo'));
       this.userSaldos = dataSaldo.userSaldo;
-      this.vUserSaldo = this.convertCurr(this.userSaldos.saldo);
+      this.saldoNow = this.convertCurr(this.userSaldos.saldo);
       const dataLokasi = JSON.parse(localStorage.getItem('userLocation'));
       this.userLokasi = dataLokasi.userLocation;
       this.vAlamat = this.userLokasi.address;
   }
   
-
   convertCurr(angka){
     var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
     var rev2    = '';

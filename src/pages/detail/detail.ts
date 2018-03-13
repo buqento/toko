@@ -187,17 +187,16 @@ export class DetailPage {
 
   addToBasket(){
     if(this.tHarga && this.userPostData.qty){
-
+      let loading = this.loadingController.create({
+        spinner: 'crescent',
+        showBackdrop: true
+      })
+      loading.present();
+      setTimeout(() => { loading.dismiss(); }, 5000);
       const dataLocation = JSON.parse(localStorage.getItem('userLocation'));
       this.userLocation = dataLocation.userLocation;
       this.lat = this.userLocation.lat;
       if(this.lat != 0){
-        let loading = this.loadingController.create({
-          spinner: 'crescent',
-          showBackdrop: true
-        })
-        loading.present();
-        setTimeout(() => { loading.dismiss(); }, 5000);
         this.authService.postData(this.userPostData,'addToBasket').then((result) => {
           this.responseData = result;
           this.dataSet = this.responseData.productData;

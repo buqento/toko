@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, Platform, AlertController, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, Platform, AlertController, ActionSheetController, ToastController, LoadingController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions } from '@ionic-native/google-maps';
 import { HomePage } from '../home/home';
@@ -23,7 +23,6 @@ export class MapPage {
   vLat: any;
   vLng: any;
   vInfoAddress: any;
-  vAlamat: any;
   userPostData = {
     "id_user":"", 
     "coordLat":"", 
@@ -37,6 +36,8 @@ export class MapPage {
     public platform: Platform,
     public authService:AuthService, 
     private googleMaps: GoogleMaps, 
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
     public alertCtrl: AlertController) {
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data.userData;
@@ -48,45 +49,18 @@ export class MapPage {
       this.loadMap();
     });
   }
-
-  presentActionSheet(respon) {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: 'Current Address',
-
-      buttons: [
-        {
-          text: respon,
-          handler: () => {
-            console.log('Archive clicked');
-          }
-        },{
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        }
-      ]
-    });
-    actionSheet.present();
-    setTimeout(() => { actionSheet.dismiss(); }, 3000);
-  }
-
   
   loadMap(){
-
-    let mapOptions: GoogleMapOptions = {
-      camera: {
-        target: { lat: -3.693485, lng: 128.182395 },
-        zoom: 18,
-        // tilt: 30
-      }
-    };
-
-    this.peta = this.googleMaps.create('map', mapOptions);
+    let loading = this.loadingCtrl.create({
+      showBackdrop: true,
+      spinner: 'crescent'
+    })
+    loading.present();
+    this.peta = this.googleMaps.create('map');
     this.peta.one(GoogleMapsEvent.MAP_READY)
       .then(()=>{
         this.peta.getMyLocation().then(pos=>{
+          loading.dismiss();
           this.peta.animateCamera({
             target: pos.latLng,
             zoom: 16
@@ -104,35 +78,20 @@ export class MapPage {
             this.vInfoAddress = respon;
             this.vLat = pos.lat;
             this.vLng = pos.lng;
-            // this.presentActionSheet(respon);
+            let toast = this.toastCtrl.create({
+              message: respon+'.',
+              position: 'top',
+              dismissOnPageChange: true,
+              // closeButtonText: 'Oke',
+              // showCloseButton: true
+            })
+            toast.present();
+            this.peta.on(GoogleMapsEvent.MAP_DRAG_START).subscribe(()=>{
+              toast.dismiss();
+            })
           })
         })
-
-
-
         this.peta.setMyLocationEnabled(true);
-        // this.peta.addMarker({
-        //     title: 'Alamat Pengiriman',
-        //     icon: 'blue',
-        //     animation: GoogleMapsAnimation.BOUNCE,
-        //     position: result.latLng,
-        //     // position: new LatLng(21.3813892, -157.93307),
-        //     draggable: true
-        //   })
-        //   .then((marker:Marker) => {
-        //     marker.on(GoogleMapsEvent.MARKER_CLICK)
-        //       .subscribe(() => {
-        //         alert('Drag marker untuk menentukan alamat pengiriman');
-        //      });
-    
-        //     marker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe( (data) => {
-        //       this.vLat = data[0].lat;
-        //       this.vLng = data[0].lng;
-        //       this.geocodeLatLng(parseFloat(this.vLat), parseFloat(this.vLng)).then(respon => {
-        //         this.showConfirm('Alamat pengiriman', respon, this.vLat, this.vLng)
-        //       })
-        //     })
-        //   })
       })
   }
 

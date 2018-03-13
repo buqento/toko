@@ -30,6 +30,7 @@ export class PenyediaPage {
       showBackdrop: true
     });
     loading.present();
+    setTimeout(() => { loading.dismiss(); }, 5000);
     this.productPostData.penyedia_id = penyedia_id;
     this.authService.postData(this.productPostData,'productByPenyedia').then((result) => {
       this.responseData = result;

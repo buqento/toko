@@ -4,4 +4,25 @@ page-home {
         height: 100%;
     }
 
+    .category{
+        padding:4px 8px 16px 8px;
+        position: relative;
+        text-align: center;
+        width:60px;
+        height:60px;
+        border-radius:15%;
+        border-style:solid;
+        border-color:#333;
+        border-width: 1pt;
+
+        .category-title {
+            position: absolute;
+            top: 50%;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #555;
+            width: 72%;
+          }
+    }
+
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { Platform } from 'ionic-angular';
+import { Network } from '@ionic-native/network';
 import { DetailPage } from '../detail/detail';
 import { PenyediaPage } from '../penyedia/penyedia';
 import { KategoriPage } from '../kategori/kategori';
@@ -31,6 +32,7 @@ export class HomePage {
   constructor(platform: Platform, 
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController, 
+    private network: Network,
     public navCtrl: NavController, 
     public authService: AuthService){
 
@@ -43,7 +45,7 @@ export class HomePage {
     this.kodeBelanja = dataKodeBelanja.kodeBelanja;
     this.productPostData.kodeBelanja = this.kodeBelanja.kode;
     this.productPostData.id_user = this.userDetails.id;
-
+    
   }
 
   ionViewDidLoad(){
@@ -135,4 +137,5 @@ export class HomePage {
       }
     });  
   }
+  
 }

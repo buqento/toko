@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
+import { HomePage } from '../home/home';
 
 @IonicPage()
 @Component({
@@ -12,7 +13,7 @@ export class SignupPage {
   uLat: any;
   uLng: any;
   responseData : any;
-  userData = {"username": "","password": "", "name": "","email": ""};
+  userData = {"username": "","password": "", "name": "","email": "", "phone":""};
 
   constructor(public navCtrl: NavController, 
     public authService: AuthService, 
@@ -23,8 +24,6 @@ export class SignupPage {
   presentToast(msg) {
     let toast = this.toastController.create({
       message: msg,
-      showCloseButton: true,
-      closeButtonText: 'Ok',
       position: 'top',
       duration: 2000
     });
@@ -57,10 +56,11 @@ export class SignupPage {
           localStorage.setItem('userLocation','{"userLocation":{"lat":"'+this.uLat+'","lng":"'+this.uLng+'"}}');
           localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+saldo+'"}}');
           localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
-          loading.dismiss();
+          this.navCtrl.setRoot(HomePage);
       }else{ 
         this.presentToast("Nama pengguna telah terdaftar.");
       }
+      loading.dismiss();
    }, (err) => {
      // Error log
    });

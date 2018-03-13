@@ -18,6 +18,8 @@ export class LoginPage {
   address: any;
   userData = {"username": "carlos","password": "111111"};
 
+  splash = true;
+
   constructor(public navCtrl: NavController, 
     public authService: AuthService,
     public loadingCtrl: LoadingController,
@@ -26,6 +28,9 @@ export class LoginPage {
   }
 
   ionViewDidLoad(){
+    setTimeout(() => {
+      this.splash = false;
+    }, 4000);
     let userLogin = localStorage.getItem("userData");
 		if(userLogin){
       this.navCtrl.setRoot(HomePage);

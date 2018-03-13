@@ -1,7 +1,7 @@
 <ion-content>
 
     <ion-fab top>
-        <button ion-fab mini color="primarydark" navPop>
+        <button ion-fab mini color="dark" navPop>
           <ion-icon name="arrow-back"></ion-icon>
         </button>
     </ion-fab>
@@ -12,9 +12,9 @@
             <p><strong>{{nama}}</strong></p>
             <p>Rp.{{vHargaSatuan}}</p>
             <p item-end>{{vJml}}</p>
-            <ion-icon item-end color="primary" name="chatbubbles" (click)="getUlasan(userPostData.kode_item, nama)"></ion-icon>
+            <ion-icon item-end color="secondarydark" name="chatbubbles" (click)="getUlasan(userPostData.kode_item, nama)"></ion-icon>
             <p item-end>{{like}}</p>
-            <ion-icon item-end color="primary" name="heart" (click)="sukaProduct()"></ion-icon>
+            <ion-icon item-end color="secondarydark" name="heart" (click)="sukaProduct()"></ion-icon>
         </ion-item>
         <ion-item text-wrap>
             <p><strong>{{vPenjual}}</strong></p>
