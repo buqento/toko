@@ -38,8 +38,9 @@ export class DetailPage {
   vAlamat: any;
   vJarak: any;
   lokasiLatLng: any;
-  vOngkir: any;
-  vTHarga: any;
+  vBiayaPengiriman: any;
+  biayaPengiriman: any;
+  estimasiHarga: any;
   ongKir:any;
   uLat: any;
   uLng: any;
@@ -48,6 +49,8 @@ export class DetailPage {
   id: any;
   like: any;
   vJml: any;
+  userDataBasket: any;
+  lokasiUser: any;
   userPostData = {
     //suka produk
     "id":"",
@@ -62,19 +65,46 @@ export class DetailPage {
     "lng":"",
     "kode_belanja":"",
     "id_penyedia":"",
+    "address":""
   };
+
+  forms = [
+    {"val":"1","name":"1 item"},
+    {"val":"2","name":"2 item"},
+    {"val":"3","name":"3 item"},
+    {"val":"4","name":"4 item"},
+    {"val":"5","name":"5 item"},
+    {"val":"6","name":"6 item"},
+    {"val":"7","name":"7 item"},
+    {"val":"8","name":"8 item"},
+    {"val":"9","name":"9 item"},
+    {"val":"10","name":"10 item"},
+    
+  ]
 
   @ViewChild('map') mapRef:ElementRef;
 
   constructor(
-    public navCtrl: NavController, public app: App, public navParams:NavParams, public alertCtrl: AlertController,
-    public authService:AuthService, public toastCtrl: ToastController, public geolocation: Geolocation,
+    public navCtrl: NavController, 
+    public app: App, 
+    public navParams:NavParams, 
+    public alertCtrl: AlertController,
+    public authService:AuthService, 
+    public toastCtrl: ToastController, 
+    public geolocation: Geolocation,
     public loadingController:LoadingController) {
 
+      this.selectOptions = {
+        // title: 'Produk',
+        subTitle: 'Tentukan jumlah produk'
+      };
+      
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data.userData;
       const dataKodeBelanja = JSON.parse(localStorage.getItem('kodeBelanja'));
       this.kodeBelanja = dataKodeBelanja.kodeBelanja;
+      const dataLokasi = JSON.parse(localStorage.getItem('userLocation'));
+      this.lokasiUser = dataLokasi.userLocation;
 
       this.nama = this.navParams.get('pNama');
       this.foto = this.navParams.get('pFoto');
@@ -93,22 +123,9 @@ export class DetailPage {
 
       this.vHargaSatuan = this.convertCurr(this.harga_satuan);
       this.userPostData.id_user = this.userDetails.id;
-      this.userPostData.lat = this.userDetails.lat;
-      this.userPostData.lng = this.userDetails.lng;
+      this.userPostData.lat = this.lokasiUser.lat;
+      this.userPostData.lng = this.lokasiUser.lng;
       this.userPostData.kode_belanja = this.kodeBelanja.kode;
-
-      // let pData = navParams.get('productDetail');
-      // this.nama = pData[0].nama;
-      // this.foto = pData[0].foto;
-      // this.dlat = pData[0].lat;
-      // this.dlng = pData[0].lng;
-      // this.like = pData[0].suka;
-      // this.harga_satuan = pData[0].harga_satuan;
-      // this.vPenjual = pData[0].nama_penyedia;
-      // this.vAlamatPenjual = pData[0].alamat;
-      // this.userPostData.kode_item = pData[0].kode_item;
-      // this.userPostData.id = pData[0].id;
-      // this.userPostData.id_penyedia = pData[0].id_penyedia;
   }
 
   ionViewDidLoad(){
@@ -121,16 +138,31 @@ export class DetailPage {
     this.userSaldos = dataSaldo.userSaldo;
     this.updateSaldo = this.convertCurr(this.userSaldos.saldo);
     this.distance(parseFloat(this.uLat), parseFloat(this.uLng), this.dlat, this.dlng, "K").then(data => {
-      this.vJarak = data;
-      this.ongKir = 1500 * parseInt(this.vJarak);
-      this.vOngkir = this.convertCurr(parseInt(this.ongKir));
-      this.tHarga = parseInt(this.ongKir);
-      this.vTHarga = this.convertCurr(this.tHarga);
+      let biayaKirim: any;
+      let jarak: any = data;
+      if(jarak >= 2){
+        biayaKirim = 2500 * parseInt(jarak);
+      }else{
+        biayaKirim = 5000;
+      }
+      this.biayaPengiriman = biayaKirim;
+      this.vBiayaPengiriman = this.convertCurr(biayaKirim);
+      this.estimasiHarga = this.convertCurr(biayaKirim);
     });
   }
 
-  getUlasan(kode_item, nama_produk){
-    let data = { kodeItem: kode_item, namaProduk: nama_produk}
+  hitung(){
+    let jumlah: any = this.userPostData.qty;
+    let hrgSatuan = this.harga_satuan;
+    let tbayar: any = jumlah * hrgSatuan;
+    this.tHarga = tbayar + this.biayaPengiriman;
+    this.hargaItem = this.convertCurr(tbayar);
+    this.userPostData.tBayar = this.tHarga;
+    this.estimasiHarga = this.convertCurr(this.tHarga);
+  }
+
+  getUlasan(kode_item, nama_produk, id_penyedia){
+    let data = { kodeItem: kode_item, namaProduk: nama_produk, idPenyedia: id_penyedia}
     this.navCtrl.push(UlasanPage, data);
   }
 
@@ -138,16 +170,6 @@ export class DetailPage {
     this.like = parseInt(this.like) + 1;
     this.authService.postData(this.userPostData,'sukaProduct');
     this.presentToast("Anda menyukai produk ini.");
-  }
-
-  hitung(){
-    let jumlah: any = this.userPostData.qty;
-    let hrgSatuan = this.harga_satuan;
-    let tbayar: any = jumlah * hrgSatuan;
-    this.tHarga = parseInt(tbayar + this.ongKir);
-    this.hargaItem = this.convertCurr(tbayar);
-    this.userPostData.tBayar = this.tHarga;
-    this.vTHarga = this.convertCurr(this.tHarga);
   }
 
   presentToast(msg) {
@@ -197,9 +219,16 @@ export class DetailPage {
       this.userLocation = dataLocation.userLocation;
       this.lat = this.userLocation.lat;
       if(this.lat != 0){
+        this.userPostData.address = this.userLocation.address;
         this.authService.postData(this.userPostData,'addToBasket').then((result) => {
           this.responseData = result;
           this.dataSet = this.responseData.productData;
+          //Update jumlah data keranjang
+          const dataBasket = JSON.parse(localStorage.getItem('userBasket'));
+          this.userDataBasket = dataBasket.userBasket;
+          let jmlBasket = parseInt(this.userDataBasket.jml) + 1;
+          localStorage.setItem('userBasket','{"userBasket":{"jml":"'+jmlBasket+'"}}');
+
           loading.dismiss();
           this.showConfirm();
         });
@@ -207,8 +236,6 @@ export class DetailPage {
       }else{
         this.navCtrl.push(MapPage);
       }
-
-
     }else{
       this.presentToast("Masukkan jumlah produk.");
     }
@@ -236,7 +263,7 @@ export class DetailPage {
     for(var i = 0; i < rev.length; i++){
         rev2  += rev[i];
         if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
-            rev2 += '.';
+            rev2 += ',';
         }
     }
     return rev2.split('').reverse().join('');

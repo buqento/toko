@@ -4,6 +4,7 @@ import { DepositPage } from '../deposit/deposit';
 import { BantuanPage } from '../bantuan/bantuan';
 import { MapPage } from '../map/map';
 import { LoginPage } from '../login/login';
+import { HistoryPage } from '../history/history';
 
 @IonicPage()
 @Component({
@@ -14,6 +15,7 @@ export class SettingPage {
   pushDeposit: any;
   pushBantuan: any;
   pushMap: any;
+  pushHistory: any;
   userDetails: any;
   userLokasi: any;
   userSaldos: any;
@@ -24,6 +26,7 @@ export class SettingPage {
       this.pushDeposit = DepositPage;
       this.pushBantuan = BantuanPage;
       this.pushMap = MapPage;
+      this.pushHistory = HistoryPage;
       const data = JSON.parse(localStorage.getItem('userData'));
       this.userDetails = data.userData;
       const dataSaldo = JSON.parse(localStorage.getItem('userSaldo'));
@@ -40,7 +43,7 @@ export class SettingPage {
     for(var i = 0; i < rev.length; i++){
         rev2  += rev[i];
         if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
-            rev2 += '.';
+            rev2 += ',';
         }
     }
     return rev2.split('').reverse().join('');

@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+        History Transaksi
+    </ion-title>
+  </ion-navbar>
+</ion-header> 
+
+<ion-content>
+    <p text-center class="emptyOrder" *ngIf="empty">
+        <ion-icon class="icSad" name="ios-sad-outline"></ion-icon>
+        <br>
+        Ups! Anda belum melakukan orderan.
+    </p>
+    <ion-list *ngIf="konten" [virtualScroll]="dataSet" approxItemHeight="20px">
+        <ion-item *virtualItem="let item" (click)="openCategory(item.id_kategori, item.title)">
+                <ion-item color="light" no-lines>
+                    <ion-icon name="ios-calendar-outline" item-start></ion-icon>
+                    <p>{{item.dt_belanja | amLocal | amDateFormat: 'DD-MM-YYYY HH:mm'}}</p>
+                    <p item-end>Rp.{{item.conv_harga}}</p>
+                </ion-item>
+                <ion-item> 
+                    <ion-icon name="ios-restaurant-outline" item-start></ion-icon>
+                    <p>{{item.nama}}</p>
+                    <p item-end>{{item.qty}} item</p>
+                </ion-item>
+                <ion-item>
+                    <ion-icon name="ios-pin-outline" item-start></ion-icon>
+                    <p text-wrap>{{item.address}}</p>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-icon name="ios-barcode-outline" item-start></ion-icon>
+                    <p>Kode Belanja: {{item.kode_belanja}}</p>
+                </ion-item>
+        </ion-item>
+    </ion-list>
+</ion-content>

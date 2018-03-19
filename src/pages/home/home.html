@@ -1,137 +1,121 @@
 <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>OkeDeli</ion-title>
-      <ion-buttons end>
-        <button ion-button icon-only (click)="openKeranjang()">
-          <ion-icon name="cart"></ion-icon>
-        </button>
-      </ion-buttons>
-    </ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-title>OkeDeli</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="openKeranjang()">
+        <span class="jml-keranjang">{{vJmlBasket}}</span>
+        <ion-icon name="ios-basket-outline"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="openOrder()">
+          <ion-icon name="ios-list-box-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <koneksi></koneksi>
+  <koneksi></koneksi>
+
+  <div>
+      <ion-slides 
+      autoplayDisableOnInteraction="false"
+      speed="100"
+      autoplay="3000"
+      initialSlide=0 
+      pager="true"
+      loop="true"
+      effect="fade"
+      autoHeight="true">
+          <ion-slide *ngFor="let item of imageArray">
+            <img src="{{item.image_url}}">
+          </ion-slide>
+      </ion-slides>
+  </div>
+
+  <ion-card>
+  <ion-scroll scrollX="true" style="width:100%;height:95px">
+      <div class="inner">
+          <ion-grid>
+              <ion-row no-padding>
+                <ion-col col-2 *ngFor="let item of kategoriArray" (click)="getProductCategory(item.id_kategori, item.title)">
+                    <div class="category">
+                      <img src="{{item.image_url}}">
+                      <p text-center class="category-title"><small>{{item.title}}</small></p>
+                    </div>
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+      </div>
+  </ion-scroll>
+  </ion-card>
+
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="arrow-dropdown"
+        pullingText="Tarik untuk pembaruan"
+        refreshingSpinner="circles"
+        refreshingText="Pembaruan...">
+      </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card>
+  <div padding>
+      <ion-segment [(ngModel)]="produk">
+        <ion-segment-button value="populer">
+          <strong>Populer</strong>
+        </ion-segment-button>
+        <ion-segment-button value="penyedia">
+          <strong>Nearby</strong>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+              
+    <div [ngSwitch]="produk">
+      <div *ngSwitchCase="'populer'">
+
+          <ion-grid fixed>
+              <ion-row>
+                <ion-col class="product" col-6 *ngFor="let item of dataSet" (click)="openDetail(item.nama, item.foto, item.lat, item.lng, item.suka, item.harga_satuan, item.nama_penyedia, item.alamat, item.kode_item, item.id, item.id_penyedia, item.jml)">
+                    <img src="https://okedeli.com/apps/images/{{item.foto}}"/>
+                        <ion-item>
+                          <p><strong>{{item.nama}}</strong></p>
+                          <p><small>Rp.{{item.conv_harga}}</small></p>
+                        </ion-item>
+                </ion-col>
+              </ion-row>
+          </ion-grid>
+
+        </div>
+              
+      <ion-list *ngSwitchCase="'penyedia'">
+        <ion-item *ngFor="let item of dataSetPenyedia" (click)="getProductPenyedia(item.id_penyedia, item.nama_penyedia)">
+          <h2>{{ item.nama_penyedia }}</h2>
+          <p text-wrap>{{ item.alamat }}</p>
+        </ion-item> 
+      </ion-list>
+    </div>
+    </ion-card>
+
     <ion-fab bottom right >
         <button ion-fab color="dark">
-          <ion-icon name="menu"></ion-icon>
+          <ion-icon name="ios-menu-outline"></ion-icon>
         </button>
         <ion-fab-list side="top">
           <button ion-fab color="success" (click)="openOrder()">
-                <ion-icon name="stopwatch"></ion-icon>
+                <ion-icon name="ios-list-box-outline"></ion-icon>
           </button>
-          <!-- <button ion-fab color="dark" (click)="openKeranjang()">
-                <ion-icon name="cart"></ion-icon>
-          </button> -->
+          <button ion-fab color="success" (click)="openKeranjang()">
+                <ion-icon name="ios-basket-outline"></ion-icon>
+          </button>
         </ion-fab-list>
         <ion-fab-list side="left">
             <button ion-fab color="dark" [navPush]="PushSetting">
-                <ion-icon name="person"></ion-icon>
+                <ion-icon name="ios-contact-outline"></ion-icon>
             </button>
             <button ion-fab color="dark" [navPush]="PushBantuan">
-                <ion-icon name="bulb"></ion-icon>
+                <ion-icon name="ios-information-circle-outline"></ion-icon>
             </button>
         </ion-fab-list>
     </ion-fab>
 
-    <ion-scroll scrollX="true" style="width:100%;height:70px">
-        <div class="inner">
-            <ion-grid>
-                <ion-row no-padding>
-                  <ion-col col-2 (click)="getProductCategory(3, 'Kue')">
-                    <div class="category">
-                        <img src="https://okedeli.com/apps/images/foodset/pudding.svg">
-                          <p text-center class="category-title"><small>Kue</small></p>
-                    </div>
-                  </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(4, 'Cepat Saji')">
-                    <div class="category">
-                        <img src="https://okedeli.com/apps/images/foodset/fast-food.svg">
-                        <p text-center class="category-title"><small>Cepat</small></p>
-                    </div>
-                  </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(1, 'Ayam')">
-                    <div class="category">
-                        <img src="https://okedeli.com/apps/images/foodset/chicken.svg">
-                        <p text-center class="category-title"><small>Ayam</small></p>
-                    </div>
-                  </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(2, 'Makanan')">
-                    <div class="category">
-                        <img src="https://okedeli.com/apps/images/foodset/rice.svg">
-                        <p text-center class="category-title"><small>Makan</small></p>
-                    </div>
-                  </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(5, 'Minuman')">
-                    <div class="category">
-                        <img src="https://okedeli.com/apps/images/foodset/coffee.svg">
-                        <p text-center class="category-title"><small>Minum</small></p>
-                    </div>
-                  </ion-col>
-                  <ion-col col-2 (click)="getProductCategory(6, 'Buah')">
-                    <div class="category">
-                        <img src="https://okedeli.com/apps/images/foodset/salad.svg">
-                        <p text-center class="category-title"><small>Buah</small></p>
-                    </div>
-                  </ion-col>
-                </ion-row>
-            </ion-grid>
-        </div>
-    </ion-scroll>
-
-    <ion-refresher (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content
-          pullingIcon="arrow-dropdown"
-          pullingText="Tarik untuk pembaruan"
-          refreshingSpinner="circles"
-          refreshingText="Pembaruan...">
-        </ion-refresher-content>
-    </ion-refresher>
-    <!-- <ion-list [virtualScroll]="dataSet" approxItemHeight="20px">
-        <ion-item *virtualItem="let item" (click)="getProductDetail(item.id)">
-            <ion-avatar item-start>
-                <ion-img [src]="item.img_product"></ion-img>
-            </ion-avatar>
-                <div><strong>{{item.nama}}</strong></div>
-                <small>{{item.harga_satuan}}</small>
-        </ion-item>
-    </ion-list> -->
-
-    <div padding>
-        <ion-segment [(ngModel)]="produk">
-          <ion-segment-button value="populer">
-            <strong>Populer</strong>
-          </ion-segment-button>
-          <ion-segment-button value="penyedia">
-            <strong>Penjual</strong>
-          </ion-segment-button>
-        </ion-segment>
-      </div>
-                
-      <div [ngSwitch]="produk">
-        <ion-list *ngSwitchCase="'populer'">
-
-            <ion-grid no-padding fixed>
-                <ion-row>
-                  <ion-col col-6 *ngFor="let item of dataSet" (click)="openDetail(item.nama, item.foto, item.lat, item.lng, item.suka, item.harga_satuan, item.nama_penyedia, item.alamat, item.kode_item, item.id, item.id_penyedia, item.jml)">
-                    <ion-card>
-                      <img src="https://okedeli.com/apps/images/{{item.foto}}"/>
-                      <ion-card-content no-padding>
-                          <ion-item>
-                            <p><strong>{{item.nama}}</strong></p>
-                            <p><small>Rp.{{item.harga_satuan}}</small></p>
-                          </ion-item>
-                      </ion-card-content>
-                    </ion-card>
-                  </ion-col>
-                </ion-row>
-            </ion-grid>
-
-        </ion-list>
-                
-        <ion-list *ngSwitchCase="'penyedia'">
-          <button ion-item *ngFor="let item of dataSetPenyedia" (click)="getProductPenyedia(item.id_penyedia, item.nama_penyedia)">
-            {{ item.nama_penyedia }}
-          </button>  
-        </ion-list>
-      </div>
 </ion-content>

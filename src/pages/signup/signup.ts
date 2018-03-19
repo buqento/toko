@@ -14,11 +14,15 @@ export class SignupPage {
   uLng: any;
   responseData : any;
   userData = {"username": "","password": "", "name": "","email": "", "phone":""};
-
+  password_type: string = 'password';
   constructor(public navCtrl: NavController, 
     public authService: AuthService, 
     public toastController: ToastController,
     public loadingCtrl: LoadingController) {
+  }
+
+  togglePasswordMode() {   
+    this.password_type = this.password_type === 'text' ? 'password' : 'text';
   }
 
   presentToast(msg) {
@@ -38,33 +42,39 @@ export class SignupPage {
   }
 
   signup(){
-    let loading = this.loadingCtrl.create({
-      spinner: 'crescent',
-      showBackdrop: true
-    })
-    loading.present();
-    setTimeout(() => { loading.dismiss(); }, 5000);
-    this.authService.postData(this.userData,'signup').then((result) => {
-    this.responseData = result;
-      if(this.responseData.userData){
-          localStorage.setItem('userData', JSON.stringify(this.responseData));
-          const data = JSON.parse(localStorage.getItem('userData'));
-          this.userDetails = data.userData;
-          this.uLat = this.userDetails.lat;
-          this.uLng = this.userDetails.lng;
-          let saldo: any = this.userDetails.saldo;
-          localStorage.setItem('userLocation','{"userLocation":{"lat":"'+this.uLat+'","lng":"'+this.uLng+'"}}');
-          localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+saldo+'"}}');
-          localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
-          this.navCtrl.setRoot(HomePage);
-      }else{ 
-        this.presentToast("Nama pengguna telah terdaftar.");
-      }
-      loading.dismiss();
-   }, (err) => {
-     // Error log
-   });
-
+    if(this.userData.username && this.userData.password && this.userData.name && this.userData.email && this.userData.phone){
+      let loading = this.loadingCtrl.create({
+        spinner: 'crescent',
+        showBackdrop: true
+      })
+      loading.present();
+      setTimeout(() => { loading.dismiss(); }, 5000);
+      this.authService.postData(this.userData,'signup').then((result) => {
+      this.responseData = result;
+        if(this.responseData.userData){
+            localStorage.setItem('userData', JSON.stringify(this.responseData));
+            const data = JSON.parse(localStorage.getItem('userData'));
+            this.userDetails = data.userData;
+            this.uLat = this.userDetails.lat;
+            this.uLng = this.userDetails.lng;
+            let saldo: any = this.userDetails.saldo;
+            localStorage.setItem('userLocation','{"userLocation":{"lat":"'+this.uLat+'","lng":"'+this.uLng+'"}}');
+            localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+saldo+'"}}');
+            localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
+            localStorage.setItem('userBasket','{"userBasket":{"jml":"'+0+'"}}');
+            localStorage.setItem('userOrder','{"userOrder":{"total":"'+0+'"}}');
+            localStorage.setItem('userHistoryOrder','{"userHistoryOrder":{"total":"'+0+'"}}');
+            this.navCtrl.setRoot(HomePage);
+        }else{ 
+          this.presentToast("Nama pengguna atau email yang Anda masukkan telah terdaftar.");
+        }
+        loading.dismiss();
+      }, (err) => {
+        // Error log
+      })
+    }else{
+      this.presentToast("Inputan data tidak valid!");
+    }
   }
 
   login(){

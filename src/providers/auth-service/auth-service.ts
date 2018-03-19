@@ -16,8 +16,49 @@ export class AuthService {
       this.http.post(apiUrl + type, JSON.stringify(credentials), {headers: headers})
       .subscribe(res => {
         resolve(res.json());
-      // }, (err) => {
-        // reject(err);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  getUlasan(type, kode) {
+    return new Promise(resolve => {
+      this.http.get(apiUrl + type + kode)
+        .subscribe(data => {
+          resolve(data);
+        }, err => {
+          console.log(err);
+        });
+    });
+  }
+
+  getUser(id) {
+    return new Promise(resolve => {
+      this.http.get(apiUrl+'/user/'+id).subscribe(data => {
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
+    });
+  }
+
+  getUsers() {
+    return new Promise(resolve => {
+      this.http.get(apiUrl+'users').subscribe(data => {
+        resolve(data);
+      }, err => {
+        console.log(err);
+      });
+    });
+  }
+
+  getCategory(keyword) {
+    return new Promise(resolve => {
+      this.http.get(apiUrl+'/category/'+keyword).subscribe(data => {
+        resolve(data);
+      }, err => {
+        console.log(err);
       });
     });
   }

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Events, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, Events, ToastController, LoadingController, ModalController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { HomePage } from '../home/home';
+import { InfoPage } from '../info/info';
+import { UlasanPage } from '../ulasan/ulasan';
 
 @IonicPage()
 @Component({
@@ -15,24 +17,55 @@ export class OrderPage {
   dataSet : any;
   kodeBelanja: any;
   totalPembayaran: any;
+  jmlOrder: any;
   userPostData = {"id_user":""};
+  empty:boolean = true;
+  konten:boolean = true;
+  pushUlasan: any;
 
-  constructor(public events: Events, public navCtrl: NavController, 
-    public toastController:ToastController, public authService: AuthService) {
+  constructor(public events: Events, 
+    public navCtrl: NavController, 
+    public toastController:ToastController, 
+    public loadingCtrl: LoadingController,
+    public modalCtrl: ModalController,
+    public authService: AuthService) {
     this.pushPage = HomePage;
+    this.pushUlasan = UlasanPage;
+    
     const data = JSON.parse(localStorage.getItem('userData'));
     this.userDetails = data.userData;
+
+    const dataOrder = JSON.parse(localStorage.getItem('userOrder'));
+    this.jmlOrder = dataOrder.userOrder;
+    let total = parseInt(this.jmlOrder.total);  
+    if(total > 1){
+      this.empty = !this.empty;
+      this.getOrder();
+    }else{
+      this.konten = !this.konten;
+    }
   }
 
-  ionViewDidLoad() {
-    this.getOrder();
-  }
-
-  createUser(firstName, angka){
-    this.events.publish('user:created', firstName, angka);
+  openInfo(nama, conv_harga_satuan, foto, nama_penyedia, alamat, kode_item, id_penyedia) {
+    let infoModal = this.modalCtrl.create(InfoPage, 
+      { pNama: nama, 
+        pHargaSatuan: conv_harga_satuan, 
+        pFoto: foto,
+        pNamaPenyedia: nama_penyedia,
+        pAlamat: alamat,
+        pKodeItem: kode_item,
+        pIdPenyedia: id_penyedia
+      })
+    infoModal.present();
   }
 
   getOrder(){
+    let loading = this.loadingCtrl.create({
+      spinner: 'crescent',
+      showBackdrop: true,
+    })
+    loading.present();
+    setTimeout(() => { loading.dismiss(); }, 5000);
     this.userPostData.id_user = this.userDetails.id;
     this.authService.postData(this.userPostData,'userOrder').then((result) => {
     this.responseData = result;
@@ -41,6 +74,7 @@ export class OrderPage {
     }, (err) => { 
       // Error log
     });
+    loading.dismiss();
   }
 
   convertCurr(angka){
@@ -49,7 +83,7 @@ export class OrderPage {
     for(var i = 0; i < rev.length; i++){
         rev2  += rev[i];
         if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
-            rev2 += '.';
+            rev2 += ',';
         }
     }
     return rev2.split('').reverse().join('');

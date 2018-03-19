@@ -1,3 +1,24 @@
 page-keranjang {
-
+    .card .list .item {
+        border-bottom: 1px solid #cfd8dc;
+    }
+    .count{
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: #cfd8dc;
+        color: #111;
+        text-align: center;
+        padding:7px;
+    }
+    .emptyOrder{
+        position: relative;
+        top:40%;
+        font-size:1em;
+        color: #cfd8dc;
+    }
+    .icSad{
+        font-size:7em;
+        color: #cfd8dc;
+    }
 }

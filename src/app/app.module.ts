@@ -25,6 +25,9 @@ import { SettingPage } from '../pages/setting/setting';
 import { UlasanPage } from '../pages/ulasan/ulasan';
 import { Network } from '@ionic-native/network';
 import { KoneksiComponent } from '../components/koneksi/koneksi';
+import { HistoryPage } from '../pages/history/history';
+import { SuksesPage } from '../pages/sukses/sukses';
+import { InfoPage } from '../pages/info/info';
 
 @NgModule({
   declarations: [
@@ -42,6 +45,9 @@ import { KoneksiComponent } from '../components/koneksi/koneksi';
     SignupPage,
     SettingPage,
     UlasanPage,
+    HistoryPage,
+    SuksesPage,
+    InfoPage,
     KoneksiComponent
   ],
   imports: [
@@ -64,6 +70,9 @@ import { KoneksiComponent } from '../components/koneksi/koneksi';
     SignupPage,
     SettingPage,
     UlasanPage,
+    HistoryPage,
+    SuksesPage,
+    InfoPage,
     KoneksiComponent
   ],
   providers: [

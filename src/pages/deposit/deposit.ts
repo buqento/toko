@@ -52,32 +52,37 @@ export class DepositPage {
   }
 
   validasi(){
-    let loading = this.loadingCtrl.create({
-      spinner: 'crescent',
-      showBackdrop: true
-    })
-    loading.present();
-    this.userPostData.kodeVoucher = this.kodeVoucher;
-    this.userPostData.idUser = this.userDetails.id;
-    this.userPostData.userSaldo = this.userDataSaldo.saldo;
-    this.authService.postData(this.userPostData,'voucherData').then((result) => {
-      this.responseData = result;
-      this.dataSet = this.responseData.dataVoucher;
-      if(this.responseData.dataVoucher){
-        //update deposit database
-        this.userPostData.valSaldo = this.dataSet[0].nominal;
-        this.authService.postData(this.userPostData,'updateSaldoUser');
-        //update deposit localstorage
-        this.updateSaldo = parseInt(this.userDataSaldo.saldo) + parseInt(this.dataSet[0].nominal);
-        localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+this.updateSaldo+'"}}');
-        this.vSaldo = this.convertCurr(this.updateSaldo);
-        this.showAlert(this.updateSaldo);
-        this.navCtrl.push(HomePage);
-      }else{
-        this.presentToast("Kode voucher tidak valid.")
-      }
-      loading.dismiss();
-    });
+    if(this.kodeVoucher){
+      let loading = this.loadingCtrl.create({
+        spinner: 'crescent',
+        showBackdrop: true
+      })
+      loading.present();
+      this.userPostData.kodeVoucher = this.kodeVoucher;
+      this.userPostData.idUser = this.userDetails.id;
+      this.userPostData.userSaldo = this.userDataSaldo.saldo;
+      this.authService.postData(this.userPostData,'voucherData').then((result) => {
+        this.responseData = result;
+        this.dataSet = this.responseData.dataVoucher;
+        if(this.responseData.dataVoucher){
+          //update deposit database
+          this.userPostData.valSaldo = this.dataSet[0].nominal;
+          this.authService.postData(this.userPostData,'updateSaldoUser');
+          //update deposit localstorage
+          this.updateSaldo = parseInt(this.userDataSaldo.saldo) + parseInt(this.dataSet[0].nominal);
+          localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+this.updateSaldo+'"}}');
+          this.vSaldo = this.convertCurr(this.updateSaldo);
+          this.showAlert(this.updateSaldo);
+          this.navCtrl.push(HomePage);
+        }else{
+          this.presentToast("Kode voucher tidak valid.")
+        }
+        loading.dismiss();
+      });
+    }else{
+      this.presentToast("Masukkan kode voucher.")
+    }
+
   }
 
   convertCurr(angka){
@@ -86,7 +91,7 @@ export class DepositPage {
     for(var i = 0; i < rev.length; i++){
         rev2  += rev[i];
         if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
-            rev2 += '.';
+            rev2 += ',';
         }
     }
     return rev2.split('').reverse().join('');

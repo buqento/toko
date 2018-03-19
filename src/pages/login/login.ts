@@ -16,8 +16,11 @@ export class LoginPage {
   uLat: any;
   uLng: any;
   address: any;
-  userData = {"username": "carlos","password": "111111"};
-
+  userData = {"username": "","password": ""};
+  userPostData = {"id_user":""};
+  dataSet: any;
+  categoryData = {};
+  password_type: string = 'password';
   splash = true;
 
   constructor(public navCtrl: NavController, 
@@ -25,6 +28,10 @@ export class LoginPage {
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController) {
       this.PushSignup = SignupPage;
+  }
+
+  togglePasswordMode() {   
+    this.password_type = this.password_type === 'text' ? 'password' : 'text';
   }
 
   ionViewDidLoad(){
@@ -71,17 +78,32 @@ export class LoginPage {
         localStorage.setItem('userLocation','{"userLocation":{"lat":"'+this.uLat+'","lng":"'+this.uLng+'","address":"'+this.address+'"}}');  
         localStorage.setItem('userSaldo','{"userSaldo":{"saldo":"'+saldo+'"}}');
         localStorage.setItem('kodeBelanja','{"kodeBelanja":{"kode":"'+this.getRandom(12)+'"}}');
+        localStorage.setItem('userBasket','{"userBasket":{"jml":"'+0+'"}}');
+        this.userPostData.id_user = this.userDetails.id;
+        this.authService.postData(this.userPostData,'userOrder').then((result) => {
+          this.responseData = result;
+          if(this.responseData.userDataOrder){
+            this.dataSet = this.responseData.userDataOrder;
+            let totalOrder = parseInt(this.dataSet[0].items_total);
+            localStorage.setItem('userOrder','{"userOrder":{"total":"'+totalOrder+'"}}');
+            localStorage.setItem('userHistoryOrder','{"userHistoryOrder":{"total":"'+totalOrder+'"}}');
+          }else{
+            localStorage.setItem('userOrder','{"userOrder":{"total":"'+0+'"}}');
+            localStorage.setItem('userHistoryOrder','{"userHistoryOrder":{"total":"'+0+'"}}');
+          }
+        })
+        
         loading.dismiss();
         this.navCtrl.setRoot(HomePage);
       }else{
         loading.dismiss();
-        this.presentToast("Nama pengguna atau kata sandi tidak valid.");
+        this.presentToast("Nama pengguna yang Anda masukkan tidak cocok dengan akun mana saja.");
       }
     }, (err) => {
    });
 
   }else{
-    this.presentToast("Data login tidak valid.");
+    this.presentToast("Inputan data tidak valid!");
   }}
 
 }

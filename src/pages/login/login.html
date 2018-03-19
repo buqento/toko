@@ -11,7 +11,7 @@
       <ion-title>Login Pengguna</ion-title>
       <ion-buttons start>
           <button ion-button icon-only [navPush]="PushSignup">
-            <ion-icon name="person-add"></ion-icon>
+            <ion-icon name="ios-person-add-outline"></ion-icon>
           </button>
       </ion-buttons>
 
@@ -29,17 +29,16 @@
 
       <ion-item>
         <ion-label floating>Kata Sandi</ion-label>
-        <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
+        <ion-input [type]="password_type" name="password" [(ngModel)]="userData.password"></ion-input>
+        <button ion-button item-end icon-only clear large (click)="togglePasswordMode()">
+          <ion-icon name="ios-eye-outline"></ion-icon>
+        </button>
       </ion-item>
-
-      <ion-item>
-          <button ion-button icon-start text-center block large (click)="logIn()">
-            Login
-          </button>
-      </ion-item>
-
-      <a ion-item text-right href="#">Lupa Kata Sandi</a>
-
+      
     </ion-list>
+
+    <div padding>
+        <button ion-button color="primary" large round full (click)="logIn()">Login</button>
+    </div>
 
 </ion-content>

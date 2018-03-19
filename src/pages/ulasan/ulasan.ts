@@ -10,7 +10,7 @@ import { AuthService } from '../../providers/auth-service/auth-service';
 export class UlasanPage {
   productPostData = {"menu_kode_item":""};
   ulasanData = {"kode_item":"", "komentar":""};
-  ulasanPostData = {"nama_pengguna":"", "menu_kode_item":"", "komentar":""};
+  ulasanPostData = {"nama_pengguna":"", "menu_kode_item":"", "komentar":"", "diskusi_id_penyedia":""};
   responseData: any;
   dataSet: any;
   vNama_produk: any;
@@ -20,13 +20,10 @@ export class UlasanPage {
     public loadingCtrl: LoadingController,
     public authService: AuthService,
     public navParams: NavParams,) {
-  }
-
-  ionViewDidLoad() {
-    let kode_item = this.navParams.get('kodeItem');
-    let nama_produk = this.navParams.get('namaProduk');
-    this.getUlasan(kode_item);
-    this.vNama_produk = nama_produk;
+      let kode_item = this.navParams.get('kodeItem');
+      let nama_produk = this.navParams.get('namaProduk');
+      this.getUlasan(kode_item);
+      this.vNama_produk = nama_produk;
   }
 
   getUlasan(kode_item){
@@ -36,8 +33,8 @@ export class UlasanPage {
     })
     loading.present();
     setTimeout(() => { loading.dismiss(); }, 5000);
-    this.productPostData.menu_kode_item = kode_item;
-    this.authService.postData(this.productPostData, 'productUlasan').then((result)=>{
+    this.ulasanPostData.menu_kode_item = this.navParams.get('kodeItem');
+    this.authService.postData(this.ulasanPostData, 'productUlasan').then(result=>{
       this.responseData = result;
       this.dataSet = this.responseData.productUlasan;
     })
@@ -50,6 +47,7 @@ export class UlasanPage {
       this.userDetails = data.userData;
       let menu_kode_item = this.navParams.get('kodeItem');
       this.ulasanPostData.menu_kode_item = menu_kode_item;
+      this.ulasanPostData.diskusi_id_penyedia = this.navParams.get('idPenyedia');
       this.ulasanPostData.nama_pengguna = this.userDetails.full_name;
       this.authService.postData(this.ulasanPostData, 'addUlasan').then((result)=>{
         this.responseData = result;
@@ -60,7 +58,7 @@ export class UlasanPage {
       })
     }else{
       let toast = this.toastCtrl.create({
-        message: 'Masukkan ulasan',
+        message: 'Masukkan ulasan Anda!',
         duration: 1000,
         position: 'top'
       })

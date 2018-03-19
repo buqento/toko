@@ -10,15 +10,16 @@ import { DetailPage } from '../detail/detail';
 })
 export class KategoriPage {
 
-  productPostData = {"id":"", "kategori":""};
-  public responseData : any;
-  public dataSet : any;
-  public judul: any;
+  productPostData = {"id":"", "kategori":"", "keyword":""};
+  responseData : any;
+  dataSet : any;
+  judul: any;
 
   constructor(public navCtrl: NavController, 
     public navParams: NavParams, 
     public loadingCtrl: LoadingController, 
     public authService: AuthService) {
+      this.initializeItems();
   }
 
   ionViewDidLoad() {
@@ -61,4 +62,23 @@ export class KategoriPage {
     });
   }
 
+  initializeItems() {
+    this.authService.postData(this.productPostData,'productDetailKategori').then(data =>{
+      this.responseData = data;
+      this.dataSet = this.responseData.detailKategori;
+    })
+  }
+
+  getItems(ev: any) {
+    let val = ev.target.value;
+    if (val && val.trim() != '') {
+      this.productPostData.keyword = val;
+      this.authService.postData(this.productPostData,'productCariKategori').then(data => {
+        this.responseData = data;
+        this.dataSet = this.responseData.cariKategori;
+      });
+    }else{
+      this.initializeItems();
+    }
+  }
 }

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, ToastController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service/auth-service';
 import { Platform } from 'ionic-angular';
-import { Network } from '@ionic-native/network';
+import { Geolocation } from '@ionic-native/geolocation';
 import { DetailPage } from '../detail/detail';
 import { PenyediaPage } from '../penyedia/penyedia';
 import { KategoriPage } from '../kategori/kategori';
@@ -26,31 +26,53 @@ export class HomePage {
   responseData: any;
   dataSet: any;
   dataSetPenyedia: any;
-  productPostData = {"kategori":"", "id":"", "kodeBelanja":"", "id_user":"", "penyedia_id":""}
-  productPenyedia = {}
+  dataKeranjang: any;
+  jmlBasket: any;
+  vJmlBasket: any;
+  userLocation: any;
+  productPostData = {"kategori":"", "id":"", "kodeBelanja":"", "id_user":"", "penyedia_id":""};
+  slideData = {};
+  productPenyedia = {};
+  userData = {"user_lat":"", "user_lng":""};
+  kategoriArray: any = [];
+  imageArray: any = [];
 
   constructor(platform: Platform, 
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController, 
-    private network: Network,
     public navCtrl: NavController, 
+    public geolocation: Geolocation,
     public authService: AuthService){
-
-    this.PushSetting = SettingPage;
-    this.PushBantuan = BantuanPage;
-    this.isAndroid = platform.is('android');    
-    const data = JSON.parse(localStorage.getItem('userData'));
-    this.userDetails = data.userData;
-    const dataKodeBelanja = JSON.parse(localStorage.getItem('kodeBelanja'));
-    this.kodeBelanja = dataKodeBelanja.kodeBelanja;
-    this.productPostData.kodeBelanja = this.kodeBelanja.kode;
-    this.productPostData.id_user = this.userDetails.id;
-    
+      this.PushSetting = SettingPage;
+      this.PushBantuan = BantuanPage;
+      this.isAndroid = platform.is('android');    
+      const data = JSON.parse(localStorage.getItem('userData'));
+      this.userDetails = data.userData;
+      const dataKodeBelanja = JSON.parse(localStorage.getItem('kodeBelanja'));
+      this.kodeBelanja = dataKodeBelanja.kodeBelanja;
+      this.productPostData.kodeBelanja = this.kodeBelanja.kode;
+      this.productPostData.id_user = this.userDetails.id;
+      const dataKeranjang = JSON.parse(localStorage.getItem('userBasket'));
+      this.jmlBasket = dataKeranjang.userBasket;
+      this.vJmlBasket = this.jmlBasket.jml;  
+      this.imageArray = 
+      [{"id":"1","image_url":"https://okedeli.com/apps/slide/s1.png"},
+      {"id":"2","image_url":"https://okedeli.com/apps/slide/s2.png"},
+      {"id":"3","image_url":"https://okedeli.com/apps/slide/s3.png"},
+      {"id":"4","image_url":"https://okedeli.com/apps/slide/s4.png"}]  
   }
 
   ionViewDidLoad(){
+    this.getAllCategory();
     this.getProduct();
-    this.getPenyedia();
+    this.getNearby();
+  }
+
+  getAllCategory(){
+    this.authService.postData(this.productPostData,'getAllCategory').then((result)=>{
+      this.responseData = result;
+      this.kategoriArray = this.responseData.categoryData;
+    })
   }
 
   doRefresh(refresher){
@@ -76,6 +98,17 @@ export class HomePage {
     this.authService.postData(this.productPenyedia,'penyedia').then((hasil) => {
       this.responseData = hasil;
       this.dataSetPenyedia = this.responseData.penyediaData;
+    });
+  }
+
+  getNearby(){
+    const dataLocation = JSON.parse(localStorage.getItem('userLocation'));
+    this.userLocation = dataLocation.userLocation;
+    this.userData.user_lat = this.userLocation.lat; 
+    this.userData.user_lng = this.userLocation.lng;
+    this.authService.postData(this.userData,'getNearby').then((result) => {
+        this.responseData = result;
+        this.dataSetPenyedia = this.responseData.dataNearby;
     });
   }
 
@@ -117,25 +150,11 @@ export class HomePage {
   }
 
   openKeranjang(){
-    this.authService.postData(this.productPostData,'userBasket').then((result)=>{
-      this.responseData = result;
-      if(this.responseData.userDataBasket){
-        this.navCtrl.push(KeranjangPage);
-      }else{
-        this.openToast("Tidak ada produk dalam keranjang.")
-      }
-    });
+    this.navCtrl.push(KeranjangPage);
   }
 
   openOrder(){
-    this.authService.postData(this.productPostData,'userOrder').then((result)=>{
-      this.responseData = result;
-      if(this.responseData.userDataOrder){
-        this.navCtrl.push(OrderPage);
-      }else{
-        this.openToast("Tidak ada orderan.")
-      }
-    });  
+    this.navCtrl.push(OrderPage);
   }
   
 }
